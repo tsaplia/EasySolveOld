@@ -56,13 +56,11 @@ function _getUserInput() {
  */
 function insertFormula(formula) {
     let elem = document.createElement("div");
-    elem.innerHTML = `$$${formula.toTex()}$$`;
+    elem.innerHTML = `\\(${formula.toTex()}\\)`;
     elem.className = "content-formula";
 
-    MathJax.Hub.Queue(
-        ["Typeset", MathJax.Hub, elem],
-        [prepareHTML, elem, formula],
-        [insertContent, elem],
-    );
+    MathJax.typeset([elem]);
+    insertContent(elem);
+    prepareHTML(elem,formula);
 }
 

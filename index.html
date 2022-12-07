@@ -9,14 +9,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css"/> 
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script>
+        window.MathJax = {
+            loader: {load: ["input/tex", "output/chtml"]},
+            options: {
+                enableMenu: false,
+                renderActions: {
+                    assistiveMml: []
+                }
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script>
         let MQ = MathQuill.getInterface(2);
     </script>
     <script src="https://kit.fontawesome.com/80f9fef578.js" crossorigin="anonymous"></script>
 
-    <script src="scr/basic.js"></script>
+    <script src="src/basic.js"></script>
     <script src="src/math/structure.js"></script>
     <script src="src/math/block.js"></script>
     <script src="src/math/term.js"></script>
