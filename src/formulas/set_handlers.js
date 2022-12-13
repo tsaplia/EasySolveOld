@@ -100,7 +100,7 @@ function _prepareEqualityParts(root, formula) {
             group.appendChild(next);
             next = group.nextElementSibling;
         }
-        _prepareTerms(group, formula.equalityParts[i]);
+        prepareTerms(group, formula.equalityParts[i]);
 
         if (next) group = _wrap(next.nextElementSibling, classNames.equalityPart);
     }
@@ -111,7 +111,7 @@ function _prepareEqualityParts(root, formula) {
  * @param {HTMLElement} root
  * @param {Block} block
  */
-function _prepareTerms(root, block) {
+function prepareTerms(root, block) {
     let group = _wrap(root.firstChild, classNames.term);
     for (let i = 0; i < block.content.length; i++) {
         let next = group.nextElementSibling;
@@ -156,6 +156,7 @@ function _prepareMults(root, term) {
 function _prepareFraction(root, term) {
     if (term.content.length == 1) {
         multiplierHandler(term.content[0], root);
+        // sprtial hanler
         return;
     }
 

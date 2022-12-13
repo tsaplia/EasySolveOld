@@ -23,12 +23,15 @@ let formulaActions = [
                 activeFormulas[0].formula.isSeparatedMultiplier(activeFormulas[0].main)));
         },
         async caller() {
+            let newPart;
             if (_getActiveType(activeFormulas[0].main) == _activeTypes.term) {
-                return activeFormulas[1].formula.substituteTerm(activeFormulas[1].main,
+                newPart =  activeFormulas[1].formula.substituteTerm(activeFormulas[1].main,
                     activeFormulas[0].formula);
+            }else{
+                newPart = activeFormulas[1].formula.substituteMultiplier(activeFormulas[1].main,
+                    activeFormulas[1].term, activeFormulas[0].formula);
             }
-            return activeFormulas[1].formula.substituteMultiplier(activeFormulas[1].main,
-                activeFormulas[1].term, activeFormulas[0].formula);
+            return activeFormulas[1].formula.copyWithModifiedPart(newPart, activeFormulas[1].term);
         },
     },
     {
@@ -45,7 +48,9 @@ let formulaActions = [
             return true;
         },
         async caller() {
-            return activeFormulas[0].formula.toCommonDenominator(...activeFormulas.map((value) => value.main));
+            let terms = activeFormulas.map((value) => value.main)
+            let newPart = activeFormulas[0].formula.toCommonDenominator(...terms);
+            return activeFormulas[0].formula.copyWithModifiedPart(newPart, terms[0]);
         },
     },
     {
@@ -55,7 +60,8 @@ let formulaActions = [
                 activeFormulas[0].term.content.includes(activeFormulas[0].main);
         },
         async caller() {
-            return activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
+            let newPart = activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
+            return activeFormulas[0].formula.copyWithModifiedPart(newPart, activeFormulas[0].term);
         },
     },
     {
@@ -73,9 +79,9 @@ let formulaActions = [
             let multFormula = await formulaInput();
             if (multFormula.equalityParts.length>1) return;
             let multBlock = multFormula.equalityParts[0];
-
-            return activeFormulas[0].formula.moveOutOfBracket([...activeFormulas.map((value) => value.main)],
-                multBlock);
+            let terms = [...activeFormulas.map((value) => value.main)];
+            let newPart = activeFormulas[0].formula.moveOutOfBracket(terms, multBlock);
+            return activeFormulas[0].formula.copyWithModifiedPart(newPart, terms[0]);
         },
     },
     {

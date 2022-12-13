@@ -24,5 +24,6 @@ for (let action of formulaActions) {
     document.querySelector(`#${action.buttonId}`).addEventListener("click", async ()=>{
         if (state!="formula" || !action.check()) return;
         insertFormula(await action.caller());
+        deleteActiveAll();
     });
 }
