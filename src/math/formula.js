@@ -192,6 +192,7 @@ class Formula extends MathStructure {
         if (leftPart.content[0].content[0].numerator.sign == "-") rightPart.content[0].changeSign();
 
         if (inverted) {
+            rightPart.content[0].transformToFrac();
             rightPart.content[0].content[0].invert();
         }
 
