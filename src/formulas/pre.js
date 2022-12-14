@@ -5,8 +5,18 @@ let interactiveField = document.querySelector(".interactive");
 let formulaReadyBtn = document.querySelector(".formula-ready");
 let insertDm = document.querySelector(".insert-dm");
 
-/** @type {string} */
-let state = "none";
+let states = {
+    none: 0,
+    disabled: 1,
+    formula: 2,
+    formulaFocus: 3,
+};
+
+/** @type {number} */
+let state = states.none;
+
+/** @type {Active} */
+let focusFormulaConfig;
 
 /** @param {HTMLElement} elem */
 function insertContent(elem) {
@@ -19,7 +29,7 @@ async function formulaInput() {
     formulaBtn.classList.add("disabled");
     insertBtn.classList.add("disabled");
     let prevState = state;
-    state = "disabled";
+    state = states.disabled;
 
     mathInputBox.style.display = "flex";
     let formula = null;
@@ -61,6 +71,6 @@ function insertFormula(formula) {
 
     MathJax.typeset([elem]);
     insertContent(elem);
-    prepareHTML(elem,formula);
+    prepareHTML(elem, formula);
 }
 

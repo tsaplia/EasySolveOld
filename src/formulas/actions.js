@@ -1,6 +1,7 @@
 let formulaActions = [
     {
         buttonId: "separate-btn",
+        state: [states.formula],
         check() {
             return (_getActiveType(activeFormulas[0].main) == _activeTypes.term ||
                 _getActiveType(activeFormulas[0].main) == _activeTypes.mult) && activeFormulas.length == 1;
@@ -15,6 +16,7 @@ let formulaActions = [
     },
     {
         buttonId: "substitute-btn",
+        state: [states.formula, states.formulaFocus],
         check() {
             return activeFormulas.length == 2 && activeFormulas[0].main.isEqual(activeFormulas[1].main) &&
                 activeFormulas[0].formula.isSeparatedTerm(activeFormulas[0].term) &&
@@ -25,9 +27,9 @@ let formulaActions = [
         async caller() {
             let newPart;
             if (_getActiveType(activeFormulas[0].main) == _activeTypes.term) {
-                newPart =  activeFormulas[1].formula.substituteTerm(activeFormulas[1].main,
+                newPart = activeFormulas[1].formula.substituteTerm(activeFormulas[1].main,
                     activeFormulas[0].formula);
-            }else{
+            } else {
                 newPart = activeFormulas[1].formula.substituteMultiplier(activeFormulas[1].main,
                     activeFormulas[1].term, activeFormulas[0].formula);
             }
@@ -36,25 +38,21 @@ let formulaActions = [
     },
     {
         buttonId: "common-denominator-btn",
+        state: [states.formula, states.formulaFocus],
         check() {
-            if (activeFormulas.length<2 && _getActiveType(activeFormulas[0].main) == _activeTypes.term) {
-                return false;
-            }
+            if (activeFormulas.length<2 || !activeFormulas.every((item) => item.main instanceof Term)) return false;
             let part = activeFormulas[0].formula._getActivePart(activeFormulas[0].main);
-            for (let i=1; i<activeFormulas.length; i++) {
-                if (_getActiveType(activeFormulas[0].main)!=_activeTypes.term ||
-                    activeFormulas[i].formula._getActivePart(activeFormulas[i].main)!=part) return false;
-            }
-            return true;
+            return activeFormulas.every((item) => item.formula._getActivePart(item.main)==part);
         },
         async caller() {
-            let terms = activeFormulas.map((value) => value.main)
+            let terms = activeFormulas.map((value) => value.main);
             let newPart = activeFormulas[0].formula.toCommonDenominator(...terms);
             return activeFormulas[0].formula.copyWithModifiedPart(newPart, terms[0]);
         },
     },
     {
         buttonId: "open-bracket-btn",
+        state: [states.formula, states.formulaFocus],
         check() {
             return activeFormulas.length == 1 && activeFormulas[0].main instanceof Block &&
                 activeFormulas[0].term.content.includes(activeFormulas[0].main);
@@ -66,14 +64,11 @@ let formulaActions = [
     },
     {
         buttonId: "out-bracket-btn",
+        state: [states.formula, states.formulaFocus],
         check() {
-            if (activeFormulas.length<2 || !(activeFormulas[0].main instanceof Term)) return false;
+            if (activeFormulas.length<2 || !activeFormulas.every((item) => item.main instanceof Term)) return false;
             let part = activeFormulas[0].formula._getActivePart(activeFormulas[0].main);
-            for (let i=1; i<activeFormulas.length; i++) {
-                if (_getActiveType(activeFormulas[0].main)!=_activeTypes.term ||
-                    activeFormulas[i].formula._getActivePart(activeFormulas[i].main)!=part) return false;
-            }
-            return true;
+            return activeFormulas.every((item) => item.formula._getActivePart(item.main)==part);
         },
         async caller() {
             let multFormula = await formulaInput();
@@ -86,9 +81,9 @@ let formulaActions = [
     },
     {
         buttonId: "multiply-btn",
+        state: [states.formula],
         check() {
-            return _getActiveType(activeFormulas[0].main) == _activeTypes.formula &&
-                activeFormulas.length == 1;
+            return _getActiveType(activeFormulas[0].main) == _activeTypes.formula && activeFormulas.length == 1;
         },
         async caller() {
             let multFormula = await formulaInput();
@@ -100,6 +95,7 @@ let formulaActions = [
     },
     {
         buttonId: "remove-eponent-btn",
+        state: [states.formula],
         check() {
             return activeFormulas.length==1 && activeFormulas[0].main instanceof Power &&
                 activeFormulas[0].formula.isSeparatedMultiplier(activeFormulas[0].main);
@@ -110,11 +106,9 @@ let formulaActions = [
     },
     {
         buttonId: "add-btn",
+        state: [states.formula],
         check() {
-            for (let item of activeFormulas) {
-                if (_getActiveType(item.main) != _activeTypes.formula) return false;
-            }
-            return true;
+            return activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
         async caller() {
             return activeFormulas[0].main.add(...activeFormulas.slice(1).map((value) => value.main));
@@ -122,12 +116,10 @@ let formulaActions = [
     },
     {
         buttonId: "substract-btn",
+        state: [states.formula],
         check() {
-            if (activeFormulas.length != 2) return false;
-            for (let item of activeFormulas) {
-                if (_getActiveType(item.main) != _activeTypes.formula) return false;
-            }
-            return true;
+            return activeFormulas.length == 2 &&
+                activeFormulas.every((item)=>_getActiveType(item.main) == _activeTypes.formula);
         },
         async caller() {
             return activeFormulas[0].main.subtract(activeFormulas[1].main);
@@ -135,12 +127,10 @@ let formulaActions = [
     },
     {
         buttonId: "devide-btn",
+        state: [states.formula],
         check() {
-            if (activeFormulas.length != 2) return false;
-            for (let item of activeFormulas) {
-                if (_getActiveType(item.main) != _activeTypes.formula) return false;
-            }
-            return true;
+            return activeFormulas.length == 2 &&
+                activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
         async caller() {
             return activeFormulas[0].main.divide(activeFormulas[1].main);

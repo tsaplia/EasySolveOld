@@ -24,16 +24,16 @@ function _mark(root, className, selector, reducer) {
 
 /**
  * get all character from element and children
- * @param {HTMLElement} elem 
+ * @param {HTMLElement} elem
  * @return {string}
  */
 function _getInnerText(elem) {
     if (elem.children.length == 0) {
         let content = window.getComputedStyle(elem, "before").content;
-        return content == 'none' ? '' : content.slice(1, -1);
+        return content == "none" ? "" : content.slice(1, -1);
     }
     let text = "";
-    for (let child of elem.children){
+    for (let child of elem.children) {
         text+= _getInnerText(child);
     }
     return text;
@@ -139,7 +139,7 @@ function _prepareMults(root, term) {
             let num = root.children[elemInd].querySelector("mjx-num mjx-mrow") ||
                  root.children[elemInd].querySelector("mjx-num");
             _prepareFraction(num, term.content[multInd].numerator);
-            let denom = root.children[elemInd].querySelector("mjx-den mjx-mrow") || 
+            let denom = root.children[elemInd].querySelector("mjx-den mjx-mrow") ||
                 root.children[elemInd].querySelector("mjx-den");
             _prepareFraction(denom, term.content[multInd].denomerator);
         } else {
