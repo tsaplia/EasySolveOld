@@ -91,6 +91,7 @@ class Term {
         }
 
         this.removeExtraBlocks();
+        if(this.getRatio()[0]==0) this.content = [new Num(0)];
     }
 
     _removeFractions() {
