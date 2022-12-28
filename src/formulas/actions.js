@@ -10,7 +10,24 @@ function _wrapPart(newPart, active, focused=false) {
         newPart = active.formula.substituteMultiplier(active.mult, active.term, new Formula([newPart]));
         return _wrapPart(newPart, active);
     }
+    if(newPartMode==newPartModes.addToEnd){
+        active.formula.equalityParts.push(newPart);
+        return active.formula.copy();
+    }
     return active.formula.copyWithModifiedPart(newPart, active.term);
+}
+
+/**
+ * Insert formula to IF depanding on newPartMode
+ * @param {Formula} formula 
+ * @param {HTMLElement} activeHTML rendered active elment
+ */
+function _addFormula(formula, activeHTML){
+    if(newPartMode == newPartModes.newLine){
+        insertFormula(formula);
+    }else{
+        replaceFormula(formula, getFormulaHTML(activeHTML));
+    }
 }
 
 let formulaActions = [
@@ -21,12 +38,12 @@ let formulaActions = [
                 (_getActiveType(activeFormulas[0].main) == _activeTypes.term ||
                 _getActiveType(activeFormulas[0].main) == _activeTypes.mult);
         },
-        async caller() {
+        caller() {
             if (_getActiveType(activeFormulas[0].main) == _activeTypes.term) {
                 return activeFormulas[0].formula.separateTerm(activeFormulas[0].main);
             }
-            return activeFormulas[0].formula.separateMultiplier(activeFormulas[0].main,
-                activeFormulas[0].term);
+            insertFormula(activeFormulas[0].formula.separateMultiplier(activeFormulas[0].main,
+                activeFormulas[0].term));
         },
     },
     {
@@ -38,7 +55,7 @@ let formulaActions = [
                 (_getActiveType(activeFormulas[0].main) == _activeTypes.mult &&
                 activeFormulas[0].formula.isSeparatedMultiplier(activeFormulas[0].main)));
         },
-        async caller() {
+        caller() {
             let newPart;
             if (_getActiveType(activeFormulas[0].main) == _activeTypes.term) {
                 newPart = activeFormulas[1].formula.substituteTerm(activeFormulas[1].main,
@@ -49,7 +66,8 @@ let formulaActions = [
             }
             let focused = (state == states.formulaFocus &&
                 activeFormulas[1].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[1], focused);
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[1], focused),
+                activeFormulas[1].HTML);
         },
     },
     {
@@ -59,12 +77,13 @@ let formulaActions = [
             let part = activeFormulas[0].formula._getActivePart(activeFormulas[0].main);
             return activeFormulas.every((item) => item.formula._getActivePart(item.main)==part);
         },
-        async caller() {
+        caller() {
             let terms = activeFormulas.map((value) => value.main);
             let newPart = activeFormulas[0].formula.toCommonDenominator(...terms);
             let focused = (state == states.formulaFocus &&
                 activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused), 
+                activeFormulas[0].HTML);
         },
     },
     {
@@ -72,7 +91,7 @@ let formulaActions = [
         check() {
             return activeFormulas.length == 1 && activeFormulas[0].main instanceof Block;
         },
-        async caller() {
+        caller() {
             let newPart;
             if(activeFormulas[0].term.content.includes(activeFormulas[0].main)){
                 newPart = activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
@@ -81,7 +100,8 @@ let formulaActions = [
             }
             let focused = (state == states.formulaFocus &&
                 activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused), 
+                activeFormulas[0].HTML);
         },
     },
     {
@@ -99,7 +119,8 @@ let formulaActions = [
             let newPart = activeFormulas[0].formula.moveOutOfBracket(terms, multBlock);
             let focused = (state == states.formulaFocus &&
                 activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused), 
+                activeFormulas[0].HTML);
         },
     },
     {
@@ -112,7 +133,7 @@ let formulaActions = [
             if (multFormula.equalityParts.length>1) return;
             let multBlock = multFormula.equalityParts[0];
 
-            return activeFormulas[0].formula.multiply(multBlock);
+            insertFormula(activeFormulas[0].formula.multiply(multBlock));
         },
     },
     {
@@ -122,7 +143,7 @@ let formulaActions = [
                 activeFormulas[0].formula.isSeparatedMultiplier(activeFormulas[0].main);
         },
         async caller() {
-            return activeFormulas[0].formula.removeExponent(activeFormulas[0].main);
+            insertFormula(activeFormulas[0].formula.removeExponent(activeFormulas[0].main));
         },
     },
     {
@@ -131,7 +152,7 @@ let formulaActions = [
             return activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
         async caller() {
-            return activeFormulas[0].main.add(...activeFormulas.slice(1).map((value) => value.main));
+            insertFormula(activeFormulas[0].main.add(...activeFormulas.slice(1).map((value) => value.main)));
         },
     },
     {
@@ -141,7 +162,7 @@ let formulaActions = [
                 activeFormulas.every((item)=>_getActiveType(item.main) == _activeTypes.formula);
         },
         async caller() {
-            return activeFormulas[0].main.subtract(activeFormulas[1].main);
+            insertFormula(activeFormulas[0].main.subtract(activeFormulas[1].main));
         },
     },
     {
@@ -151,7 +172,7 @@ let formulaActions = [
                 activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
         async caller() {
-            return activeFormulas[0].main.divide(activeFormulas[1].main);
+            insertFormula(activeFormulas[0].main.divide(activeFormulas[1].main));
         },
     },
 ];

@@ -14,6 +14,14 @@ let states = {
 /** @type {number} */
 let state = states.none;
 
+let newPartModes = {
+    newLine: 0,
+    addToEnd: 1,
+    replace: 2
+}
+/**@type {number} */
+let newPartMode = newPartModes.addToEnd;
+
 /**
  * @callback EventHandlerFunc
  * @type {{path:Active, handlers:Array<{target:HTMLElement, func: HandlerFunc}>}} */
@@ -24,6 +32,7 @@ let focusFormulaConfig = null;
  * @param {?HTMLElement} before 
  */
 function insertContent(elem, before) {
+    deleteActiveAll();
     if(before){
         interactiveField.insertBefore(elem,before);
     }else{
@@ -42,8 +51,6 @@ async function formulaInput(defaultTeX="") {
     inputField.latex(defaultTeX);
 
     document.querySelectorAll(".dropdown-menu.show").forEach((el)=>el.classList.remove("show"));
-    formulaBtn.classList.add("disabled");
-    insertBtn.classList.add("disabled");
     let prevState = state;
     state = states.disabled;
 
@@ -60,8 +67,6 @@ async function formulaInput(defaultTeX="") {
     inputField.latex("");
 
     mathInputBox.style.display = "none";
-    formulaBtn.classList.remove("disabled");
-    insertBtn.classList.remove("disabled");
     state = prevState;
 
     return formula;
@@ -99,5 +104,16 @@ function insertFormula(formula, before) {
 function replaceFormula(formula,elem){
     insertFormula(formula, elem);
     deleteContent(elem);
+}
+
+/**
+ * Get ineractive field child node that conteins element
+ * @param {HTMLElement} elem 
+ * @return {?HTMLElement}
+ */
+function getFormulaHTML(elem){
+    for(let child of interactiveField.children){
+        if(child.contains(elem)) return child;
+    }
 }
 

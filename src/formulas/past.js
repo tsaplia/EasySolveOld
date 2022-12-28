@@ -4,7 +4,6 @@ interactiveField.addEventListener("click", (event) => {
     }
 });
 
-
 document.querySelector("#focus-btn").addEventListener("click", ()=>{
     if (state==states.formula && activeFormulas.length==1 && activeFormulas[0].main instanceof Block) {
         state = states.formulaFocus;
@@ -36,7 +35,10 @@ document.querySelector(".insert-formula-btn").addEventListener("click", async ()
 for (let action of formulaActions) {
     document.querySelector(`#${action.buttonId}`).addEventListener("click", async ()=>{
         if (![states.formula, states.formulaFocus].includes(state) || !action.check()) return;
-        insertFormula(await action.caller());
-        deleteActiveAll();
+        action.caller();
     });
 }
+
+document.querySelectorAll("input[name='new-part-mod']").forEach(elem => {
+    elem.addEventListener("click", ()=>newPartMode = elem.value-'0');
+});
