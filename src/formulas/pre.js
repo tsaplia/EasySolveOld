@@ -3,7 +3,6 @@ let insertBtn = document.querySelector(".insert-btn");
 let formulaBtn = document.querySelector(".formulas-btn");
 let interactiveField = document.querySelector(".interactive");
 let formulaReadyBtn = document.querySelector(".formula-ready");
-let insertDm = document.querySelector(".insert-dm");
 
 let states = {
     none: 0,
@@ -20,13 +19,28 @@ let state = states.none;
  * @type {{path:Active, handlers:Array<{target:HTMLElement, func: HandlerFunc}>}} */
 let focusFormulaConfig = null;
 
-/** @param {HTMLElement} elem */
-function insertContent(elem) {
-    interactiveField.append(elem);
+/**
+ * @param {HTMLElement} elem 
+ * @param {?HTMLElement} before 
+ */
+function insertContent(elem, before) {
+    if(before){
+        interactiveField.insertBefore(elem,before);
+    }else{
+        interactiveField.append(elem);
+    }
 }
 
+/**
+ * @param {HTMLElement} elem element fith formula to be deleted
+ */
+function deleteContent(elem){
+    interactiveField.removeChild(elem);
+}
 
-async function formulaInput() {
+async function formulaInput(defaultTeX="") {
+    inputField.latex(defaultTeX);
+
     document.querySelectorAll(".dropdown-menu.show").forEach((el)=>el.classList.remove("show"));
     formulaBtn.classList.add("disabled");
     insertBtn.classList.add("disabled");
@@ -64,15 +78,26 @@ function _getUserInput() {
 
 /**
  * Add formula element to interactiveField
- * @param {Formula} formula element with visualised formula
+ * @param {Formula} formula formula to be inserted
+ * @param {?HTMLElement} before insert before 
  */
-function insertFormula(formula) {
+function insertFormula(formula, before) {
     let elem = document.createElement("div");
     elem.innerHTML = `\\(${formula.toTex()}\\)`;
     elem.className = "content-formula";
 
     MathJax.typeset([elem]);
-    insertContent(elem);
+    insertContent(elem, before);
     prepareHTML(elem, formula);
+}
+
+/**
+ * Replace rendered formula
+ * @param {Formula} formula new formula
+ * @param {HTMLElement} elem element with redered formula
+ */
+function replaceFormula(formula,elem){
+    insertFormula(formula, elem);
+    deleteContent(elem);
 }
 

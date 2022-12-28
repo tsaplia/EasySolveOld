@@ -28,15 +28,6 @@ document.querySelector("#focus-btn").addEventListener("click", ()=>{
     }
 });
 
-document.addEventListener("copy", (event)=>{
-    if (activeFormulas.length != 1 || state != states.formula) return;
-    let TeX = activeFormulas[0].main.toTex();
-    if (TeX) {
-        event.clipboardData.setData("text/plain", TeX);
-    }
-    event.preventDefault();
-});
-
 document.querySelector(".insert-formula-btn").addEventListener("click", async ()=>{
     insertFormula(await formulaInput());
 });
