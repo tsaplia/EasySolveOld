@@ -70,11 +70,15 @@ let formulaActions = [
     {
         buttonId: "open-bracket-btn",
         check() {
-            return activeFormulas.length == 1 && activeFormulas[0].main instanceof Block &&
-                activeFormulas[0].term.content.includes(activeFormulas[0].main);
+            return activeFormulas.length == 1 && activeFormulas[0].main instanceof Block;
         },
         async caller() {
-            let newPart = activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
+            let newPart;
+            if(activeFormulas[0].term.content.includes(activeFormulas[0].main)){
+                newPart = activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
+            }else{
+                newPart = activeFormulas[0].formula.openBracketsFrac(activeFormulas[0].main, activeFormulas[0].term);
+            }
             let focused = (state == states.formulaFocus &&
                 activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
             return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);

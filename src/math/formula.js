@@ -223,15 +223,36 @@ class Formula extends MathStructure {
         });
 
         for (let i = 0; i < part.content.length; i++) {
-            if (!part.content[i].content.includes(block)) {
-                continue;
+            if (part.content[i].content.includes(block)) {
+                part.content.splice(i, 1, ...newTerms);
             }
-
-            part.content.splice(i, 1, ...newTerms);
         }
         part.simplify();
 
         return part;
+    }
+
+     /**
+     * @param {Block} block
+     * @param {Term} term
+     * @return {Block}
+     */
+    openBracketsFrac(block, term){
+        let newTerm = term.copy();
+        for(let i=0; i<term.content.length; i++){
+            if(!(term.content[i] instanceof Frac)) continue;
+            newTerm.content[i] = newTerm.content[i].copy();
+            if(term.content[i].numerator.content.includes(block)){
+                let formula = new Formula([Block.wrap(term.content[i].numerator)]);
+                newTerm.content[i].numerator = new Term([formula.openBrackets(block, term.content[i].numerator)]);
+                newTerm.content[i].numerator.removeExtraBlocks();
+            }else if(term.content[i].denomerator.content.includes(block)){
+                let formula = new Formula([Block.wrap(term.content[i].numerator)]);
+                newTerm.content[i].denomerator = new Term([formula.openBrackets(block, term.content[i].denomerator)]);
+                newTerm.content[i].denomerator.removeExtraBlocks();
+            }
+        }
+        return this._replaceTerms([term], newTerm);
     }
 
     /**
@@ -395,6 +416,7 @@ class Formula extends MathStructure {
                 term.mul(multiplier);
                 term.simplify();
             }
+            part.removeExtraBlocks();
         }
 
         return newFormula;
