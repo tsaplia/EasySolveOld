@@ -127,7 +127,7 @@ function _isActive(elem, param = "main") {
  */
 function _addHandler(elem, func) {
     elem.addEventListener("click", func);
-    if (state == states.formulaFocus) {
+    if (state == states.formulaFocus && focusFormulaConfig.path.HTML.contains(elem)) {
         focusFormulaConfig.handlers.push({target: elem, func: func});
     }
 }

@@ -62,7 +62,9 @@ let formulaActions = [
         async caller() {
             let terms = activeFormulas.map((value) => value.main);
             let newPart = activeFormulas[0].formula.toCommonDenominator(...terms);
-            return activeFormulas[0].formula.copyWithModifiedPart(newPart, terms[0]);
+            let focused = (state == states.formulaFocus &&
+                activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
+            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
         },
     },
     {
@@ -73,7 +75,9 @@ let formulaActions = [
         },
         async caller() {
             let newPart = activeFormulas[0].formula.openBrackets(activeFormulas[0].main, activeFormulas[0].term);
-            return activeFormulas[0].formula.copyWithModifiedPart(newPart, activeFormulas[0].term);
+            let focused = (state == states.formulaFocus &&
+                activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
+            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
         },
     },
     {
@@ -89,7 +93,9 @@ let formulaActions = [
             let multBlock = multFormula.equalityParts[0];
             let terms = [...activeFormulas.map((value) => value.main)];
             let newPart = activeFormulas[0].formula.moveOutOfBracket(terms, multBlock);
-            return activeFormulas[0].formula.copyWithModifiedPart(newPart, terms[0]);
+            let focused = (state == states.formulaFocus &&
+                activeFormulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
+            return _wrapPart(newPart, focused?focusFormulaConfig.path: activeFormulas[0], focused);
         },
     },
     {

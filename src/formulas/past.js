@@ -4,23 +4,22 @@ interactiveField.addEventListener("click", (event) => {
     }
 });
 
-// for focus state
-document.querySelector("#focus-btn").addEventListener("click", ()=>{
-    if (state!=states.formula || activeFormulas.length !=1 || !(activeFormulas[0].main instanceof Block)) return;
-    state = states.formulaFocus;
-    focusFormulaConfig = {
-        path: activeFormulas[0],
-        handlers: [],
-    };
-    deleteActive(activeFormulas[0].main);
-    formulaHandler(new Formula([focusFormulaConfig.path.main]), focusFormulaConfig.path.HTML);
-    prepareTerms(focusFormulaConfig.path.HTML, focusFormulaConfig.path.main);
-});
 
-interactiveField.addEventListener("click", (event) => {
-    if (state == states.formulaFocus && event.target == interactiveField) {
+document.querySelector("#focus-btn").addEventListener("click", ()=>{
+    if (state==states.formula && activeFormulas.length==1 && activeFormulas[0].main instanceof Block) {
+        state = states.formulaFocus;
+        document.querySelector("#focus-btn").innerHTML = "Remove focus";
+        focusFormulaConfig = {
+            path: activeFormulas[0],
+            handlers: [],
+        };
+        deleteActive(activeFormulas[0].main);
+        formulaHandler(new Formula([focusFormulaConfig.path.main]), focusFormulaConfig.path.HTML);
+        prepareTerms(focusFormulaConfig.path.HTML, focusFormulaConfig.path.main);
+    }else if(state == states.formulaFocus){
         deleteActiveAll();
         state = states.none;
+        document.querySelector("#focus-btn").innerHTML = "Focus";
         for (let handler of focusFormulaConfig.handlers) {
             handler.target.removeEventListener("click", handler.func);
         }

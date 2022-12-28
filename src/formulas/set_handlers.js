@@ -140,6 +140,7 @@ function deleteTermGroups(root) {
         }
         group = group.nextElementSibling;
     }
+    root.querySelectorAll(`.${classNames.term}`).forEach((el)=>{root.removeChild(el)});
 }
 
 
