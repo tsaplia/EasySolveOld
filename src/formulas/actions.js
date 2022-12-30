@@ -1,7 +1,7 @@
 /**
  * Wrap changed parts depending on the equality mode and focus mode
  * @param {Block} newPart equlity part
- * @param {Active} active
+ * @param {ActiveFormula} active
  * @param {boolean} focused
  * @return {Formula}
  */
@@ -26,7 +26,7 @@ function _addFormula(formula, activeHTML){
     if(newPartMode == newPartModes.newLine){
         insertFormula(formula);
     }else{
-        replaceFormula(formula, getFormulaHTML(activeHTML));
+        replaceFormula(formula, activeHTML);
     }
 }
 
@@ -40,10 +40,11 @@ let formulaActions = [
         },
         caller() {
             if (_getActiveType(activeFormulas[0].main) == _activeTypes.term) {
-                return activeFormulas[0].formula.separateTerm(activeFormulas[0].main);
+                insertFormula( activeFormulas[0].formula.separateTerm(activeFormulas[0].main));
+            }else{
+                insertFormula(activeFormulas[0].formula.separateMultiplier(activeFormulas[0].main,
+                    activeFormulas[0].term));
             }
-            insertFormula(activeFormulas[0].formula.separateMultiplier(activeFormulas[0].main,
-                activeFormulas[0].term));
         },
     },
     {
@@ -142,7 +143,7 @@ let formulaActions = [
             return activeFormulas.length==1 && activeFormulas[0].main instanceof Power &&
                 activeFormulas[0].formula.isSeparatedMultiplier(activeFormulas[0].main);
         },
-        async caller() {
+        caller() {
             insertFormula(activeFormulas[0].formula.removeExponent(activeFormulas[0].main));
         },
     },
@@ -151,7 +152,7 @@ let formulaActions = [
         check() {
             return activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
-        async caller() {
+        caller() {
             insertFormula(activeFormulas[0].main.add(...activeFormulas.slice(1).map((value) => value.main)));
         },
     },
@@ -161,7 +162,7 @@ let formulaActions = [
             return activeFormulas.length == 2 &&
                 activeFormulas.every((item)=>_getActiveType(item.main) == _activeTypes.formula);
         },
-        async caller() {
+        caller() {
             insertFormula(activeFormulas[0].main.subtract(activeFormulas[1].main));
         },
     },
@@ -171,8 +172,37 @@ let formulaActions = [
             return activeFormulas.length == 2 &&
                 activeFormulas.every((item)=> _getActiveType(item.main) == _activeTypes.formula );
         },
-        async caller() {
+        caller() {
             insertFormula(activeFormulas[0].main.divide(activeFormulas[1].main));
         },
     },
+    {
+        buttonId: "focus-btn",
+        check() {
+            return (state==states.formula && activeFormulas.length==1 && activeFormulas[0].main instanceof Block) ||
+                (state == states.formulaFocus);
+        },
+        caller() {
+            if (state==states.formula && activeFormulas.length==1 && activeFormulas[0].main instanceof Block) {
+                state = states.formulaFocus;
+                document.querySelector(`#${this.buttonId}`).innerHTML = "Remove focus";
+                focusFormulaConfig = {
+                    path: activeFormulas[0],
+                    handlers: [],
+                };
+                deleteActive(activeFormulas[0].main);
+                formulaHandler(new Formula([focusFormulaConfig.path.main]), focusFormulaConfig.path.HTML);
+                prepareTerms(focusFormulaConfig.path.HTML, focusFormulaConfig.path.main);
+            }else if(state == states.formulaFocus){
+                deleteActiveAll();
+                state = states.none;
+                document.querySelector(`#${this.buttonId}`).innerHTML = "Focus";
+                for (let handler of focusFormulaConfig.handlers) {
+                    handler.target.removeEventListener("click", handler.func);
+                }
+                deleteTermGroups(focusFormulaConfig.path.HTML);
+                focusFormulaConfig = null;
+            }
+        },
+    }
 ];

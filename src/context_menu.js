@@ -6,16 +6,13 @@ function cmCopy(event){
     }
     event.preventDefault();
 }
-document.addEventListener("copy", cmCopy);
-document.querySelector("#copy-btn").addEventListener("click", cmCopy); 
 
 async function cmEdit(event){
     if(activeFormulas.length==1 && activeFormulas[0].main instanceof Formula){
         menu.classList.remove("active-cm");
-        replaceFormula(await formulaInput(activeFormulas[0].main.toTex()), activeFormulas[0].HTML.parentElement.parentElement);
+        replaceFormula(await formulaInput(activeFormulas[0].main.toTex()), activeFormulas[0].HTML);
     }
 }
-document.querySelector("#edit-btn").addEventListener("click", cmEdit); 
 
 async function cmPaste(event){
     if(event.target.tagName=="TEXTAREA") return;
@@ -34,13 +31,16 @@ async function cmPaste(event){
     }
     event.preventDefault();
 }
-document.addEventListener("paste", cmPaste);
-document.querySelector("#paste-btn").addEventListener("click", cmPaste); 
 
 function cmDelete(event){
     for(let active of activeFormulas){
         if(active.main instanceof Formula) deleteContent(active.HTML.parentElement.parentElement)
     }
 }
-document.querySelector("#delete-btn").addEventListener("click", cmDelete); 
 
+document.addEventListener("copy", cmCopy);
+document.addEventListener("paste", cmPaste);
+document.querySelector("#paste-btn").addEventListener("click", cmPaste); 
+document.querySelector("#copy-btn").addEventListener("click", cmCopy); 
+document.querySelector("#edit-btn").addEventListener("click", cmEdit); 
+document.querySelector("#delete-btn").addEventListener("click", cmDelete); 

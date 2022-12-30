@@ -1,10 +1,3 @@
-/**
- * @typedef {{main: MathStructure, HTML: HTMLElement , mult: ?MathStructure, term: ?Term, formula: ?Formula}} Active
- * Description of active element
- */
-
-/** @type {Array<Active>} */
-let activeFormulas = []; // array of description of selected elements
 
 let _activeTypes = {
     mult: 0,
@@ -39,7 +32,7 @@ function _stateCheck() {
 
 /**
  * Set selected element
- * @param {Active} active description of selected element
+ * @param {ActiveFormula} active description of selected element
  */
 function setActive(active) {
     deleteActiveAll();
@@ -51,7 +44,7 @@ function setActive(active) {
 
 /**
  * Add element to selected list
- * @param {Active} active description of selected element
+ * @param {ActiveFormula} active description of selected element
  */
 function addActive(active) {
     for (let key in active) {
@@ -60,11 +53,12 @@ function addActive(active) {
 
     _setStyle(active);
     activeFormulas.push(active);
+    if (state==states.none) state = states.formula;
 }
 
 /**
  * set css class to html element depending on the activeType
- * @param {Active} active selected element
+ * @param {ActiveFormula} active selected element
  */
 function _setStyle(active) {
     switch (_getActiveType(active.main)) {
@@ -92,6 +86,7 @@ function deleteActive(elem) {
             break;
         }
     }
+    if(activeFormulas.length == 0 && state!=states.formulaFocus) state = states.none;
 }
 
 /**

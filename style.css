@@ -23,14 +23,19 @@
     vertical-align: -0.5em;
 }
 
+.mq-math-mode {
+    border:1px solid #ced4da;
+}
+
 .in-formula{
     padding-right: 20px !important;
     font-size: 2em !important;
 }
 
-#header{
-    color: aliceblue;
+.content-text{
+    font-size: 1.5em;
 }
+
 .context-menu{
     position: fixed;
 }
@@ -38,10 +43,11 @@
     display: block;
 }
 .interactive{
-    min-height: 100px;
+    min-height: 500px;
     background-color: rgb(255, 255, 255);
+    overflow: auto;
 }
-.math-input{
+.math-input,.text-input{
     display: none;
     position:absolute;
     width: 100%;
@@ -54,4 +60,12 @@ body{
 
 .in-function, .in-term, .in-equality-part{
     display: inline-block;
+}
+
+.input-form{
+    background-color: aliceblue;
+}
+.input-error{
+    color: #dc3545ed!important;
+    display: none;
 }
