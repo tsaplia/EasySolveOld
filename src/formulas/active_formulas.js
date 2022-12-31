@@ -1,103 +1,38 @@
-
-let _activeTypes = {
-    mult: 0,
-    term: 1,
-    formula: 2,
-};
-
-/**
- * Returns type of active element
- * @param {MathStructure} struct active element
- * @return {number} active element type id
- */
-function _getActiveType(struct) {
-    if (struct instanceof Formula) {
-        return _activeTypes.formula;
-    } if (struct instanceof Term) {
-        return _activeTypes.term;
-    } if (struct instanceof MathStructure) {
-        return _activeTypes.mult;
-    }
-    throw new Error("Struct must be MathStructure instance");
-}
-
-/**
- * Is it possible to work with formulas
- * @return {boolean}
- */
-function _stateCheck() {
-    return [states.formula, states.none, states.formulaFocus].includes(state);
-}
-
-
 /**
  * Set selected element
  * @param {ActiveFormula} active description of selected element
  */
-function setActive(active) {
+function setFormulaActive(active) {
     deleteActiveAll();
-    _setStyle(active);
-    activeFormulas.push(active);
-
-    if (state==states.none) state = states.formula;
+    setSelectedStyle(active);
+    selected.formulas.push(active);
 }
 
 /**
  * Add element to selected list
  * @param {ActiveFormula} active description of selected element
  */
-function addActive(active) {
+function addFormulaActive(active) {
     for (let key in active) {
-        deleteActive(active[key]);
+        deleteFormulaActive(active[key]);
     }
 
-    _setStyle(active);
-    activeFormulas.push(active);
-    if (state==states.none) state = states.formula;
-}
-
-/**
- * set css class to html element depending on the activeType
- * @param {ActiveFormula} active selected element
- */
-function _setStyle(active) {
-    switch (_getActiveType(active.main)) {
-    case _activeTypes.formula:
-        active.HTML.classList.toggle("active-formula");
-        break;
-    case _activeTypes.term:
-        active.HTML.classList.toggle("active-term");
-        break;
-    case _activeTypes.mult:
-        active.HTML.classList.toggle("active-mult");
-        break;
-    }
+    setSelectedStyle(active);
+    selected.formulas.push(active);
 }
 
 /**
  * Remove element from selected
  * @param {MathStructure} elem
  */
-function deleteActive(elem) {
-    for (let i = 0; i < activeFormulas.length; i++) {
-        if (activeFormulas[i].main == elem) {
-            _setStyle(activeFormulas[i]);
-            activeFormulas.splice(i, 1);
+function deleteFormulaActive(elem) {
+    for (let i = 0; i < selected.formulas.length; i++) {
+        if (selected.formulas[i].main == elem) {
+            setSelectedStyle(selected.formulas[i]);
+            selected.formulas.splice(i, 1);
             break;
         }
     }
-    if(activeFormulas.length == 0 && state!=states.formulaFocus) state = states.none;
-}
-
-/**
- * Remove all selected elements
- */
-function deleteActiveAll() {
-    for (let obj of activeFormulas) {
-        _setStyle(obj);
-    }
-
-    activeFormulas = [];
 }
 
 /**
@@ -107,7 +42,7 @@ function deleteActiveAll() {
  * @return {boolean}
  */
 function _isActive(elem, param = "main") {
-    for (let obj of activeFormulas) {
+    for (let obj of selected.formulas) {
         if (obj[param] == elem) {
             return true;
         }
@@ -122,7 +57,7 @@ function _isActive(elem, param = "main") {
  */
 function _addHandler(elem, func) {
     elem.addEventListener("click", func);
-    if (state == states.formulaFocus && focusFormulaConfig.path.HTML.contains(elem)) {
+    if (focusFormulaConfig && focusFormulaConfig.path.HTML.contains(elem)) {
         focusFormulaConfig.handlers.push({target: elem, func: func});
     }
 }
@@ -134,10 +69,10 @@ function _addHandler(elem, func) {
  */
 function multiplierHandler(mult, elem) {
     _addHandler(elem, (event) => {
-        if (!_stateCheck() || (state == states.formulaFocus && mult==focusFormulaConfig.path.mult)) return;
+        if (state==state.DIS || (focusFormulaConfig && mult==focusFormulaConfig.path.mult)) return;
 
         if (_isActive(mult)) {
-            deleteActive(mult);
+            deleteFormulaActive(mult);
             event.stopPropagation();
             return;
         };
@@ -157,7 +92,7 @@ function multiplierHandler(mult, elem) {
  */
 function termHandler(term, elem) {
     _addHandler(elem, (event) => {
-        if (!_stateCheck()) return;
+        if (state==state.DIS) return;
 
         if (event.clickDescription) {
             if (!_isActive(term, "term")) {
@@ -174,7 +109,7 @@ function termHandler(term, elem) {
         event.clickDescription.term = term;
 
         if (event.clickDescription.main == term && _isActive(term)) {
-            deleteActive(term);
+            deleteFormulaActive(term);
             event.stopPropagation();
         }
     });
@@ -187,7 +122,7 @@ function termHandler(term, elem) {
  */
 function formulaHandler(formula, elem) {
     _addHandler(elem, (event) => {
-        if (!_stateCheck()) return;
+        if (state==state.DIS) return;
         event.stopPropagation();
 
         if (!event.clickDescription) {
@@ -199,14 +134,14 @@ function formulaHandler(formula, elem) {
         event.clickDescription.formula = formula;
 
         if (event.clickDescription.main == formula && _isActive(formula)) {
-            deleteActive(formula);
+            deleteFormulaActive(formula);
             return;
         }
 
         if (event.shiftKey) {
-            addActive(event.clickDescription);
+            addFormulaActive(event.clickDescription);
         } else {
-            setActive(event.clickDescription);
+            setFormulaActive(event.clickDescription);
         }
     });
 }

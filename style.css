@@ -1,4 +1,4 @@
-.content-formula{
+.content-formula, .content-text{
     user-select: none; 
    -webkit-user-select: none; 
    -khtml-user-select: none; 
@@ -18,6 +18,10 @@
     background-color: blue;
 }
 
+.active-text{
+    background-color: green;
+}
+
 .mq-math-mode .mq-supsub {
     font-size: 75%;
     vertical-align: -0.5em;
@@ -28,6 +32,7 @@
 }
 
 .in-formula{
+    padding: 10px 0;
     padding-right: 20px !important;
     font-size: 2em !important;
 }

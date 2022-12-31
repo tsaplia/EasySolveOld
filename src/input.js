@@ -16,14 +16,12 @@ const mathInputField = MQ.MathField(document.querySelector("#mq-text-field"), mq
 function _prepareInput(inputBox){
     document.querySelectorAll(".dropdown-menu.show").forEach((el)=>el.classList.remove("show"));
     inputBox.style.display = "flex";
-    let prevState = state;
-    state = states.disabled;
-    return prevState;
+    state.disable = true;
 }
 
-function _removeInput(inputBox, prevState){
+function _removeInput(inputBox){
     inputBox.style.display = "none";
-    state = prevState;
+    state.disable = false;
 }
 
 function _getFormulaInput() {
@@ -35,7 +33,7 @@ function _getFormulaInput() {
 }
 
 async function formulaInput(defaultTeX="") {
-    let prevState = _prepareInput(formulaInputBox);
+    _prepareInput(formulaInputBox);
     formulaInputField.latex(defaultTeX);
 
     let formula = null;
@@ -48,7 +46,7 @@ async function formulaInput(defaultTeX="") {
         }
     }
     formulaInputField.latex("");
-    _removeInput(formulaInputBox,prevState);
+    _removeInput(formulaInputBox);
 
     return formula;
 }
@@ -63,28 +61,16 @@ function _getTextInput() {
 }
 
 async function textInput(defaultTeX="") {
-    let prevState = _prepareInput(textInputBox);
+    _prepareInput(textInputBox);
     textInputArea.value = defaultTeX;
     
     let text = await _getTextInput();
     while (!checkText(text)) {
         text = await _getTextInput();
     }
-    _removeInput(textInputBox,prevState);
+    _removeInput(textInputBox);
     textInputArea.value = "";
 
     return text;
-}
-
-/**
- * Is text correct for MathJax
- * @param {string} text 
- * @return {boolean} 
- */
- function checkText(text){
-    let elem = document.createElement("div");
-    elem.innerHTML = text;
-    MathJax.typeset([elem]);
-    return !elem.querySelector("mjx-merror");
 }
 

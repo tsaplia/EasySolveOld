@@ -247,7 +247,7 @@ class Formula extends MathStructure {
                 newTerm.content[i].numerator = new Term([formula.openBrackets(block, term.content[i].numerator)]);
                 newTerm.content[i].numerator.removeExtraBlocks();
             }else if(term.content[i].denomerator.content.includes(block)){
-                let formula = new Formula([Block.wrap(term.content[i].numerator)]);
+                let formula = new Formula([Block.wrap(term.content[i].denomerator)]);
                 newTerm.content[i].denomerator = new Term([formula.openBrackets(block, term.content[i].denomerator)]);
                 newTerm.content[i].denomerator.removeExtraBlocks();
             }

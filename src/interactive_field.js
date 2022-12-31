@@ -7,22 +7,29 @@
 
 let interactiveField = document.querySelector(".interactive"); 
 
-/** @type {Array<ActiveFormula>} */
-let activeFormulas = []; // array of selected formulas descriptions 
+/**
+ * @type {{formulas: Array<ActiveFormula>, texts:Array<ActiveText>}}
+ */
+let selected = {
+    formulas: [],
+    texts: [],
+}
 
-/** @type {Array<ActiveText>} */
-let activeTexts = [];
-
-let states = {
-    none: 0,
-    disabled: 1,
-    formula: 2,
-    formulaFocus: 3,
-};
-
-/** @type {number} */
-let state = states.none;
-
+let state = {
+    valueOf(){
+        if(this.disable) return this.DIS;
+        if(selected.formulas.length && selected.texts.length) return this.UNDEF;
+        if(selected.formulas.length) return this.FORMULA;
+        if(selected.texts.length) return this.TEXT;
+        return this.NONE;
+    },
+    disable: false,
+    DIS: 0,
+    NONE: 1,
+    UNDEF: 2,
+    FORMULA: 3,
+    TEXT:4
+}
 let newPartModes = {
     newLine: 0,
     addToEnd: 1,
@@ -98,5 +105,6 @@ function replaceFormula(formula,elem){
 
     MathJax.typeset([elem]);
     insertContent(elem, before);
+    textHandler(elem, text);
 }
 

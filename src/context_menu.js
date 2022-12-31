@@ -1,6 +1,6 @@
 function cmCopy(event){
-    if (activeFormulas.length != 1 || ![states.formula, states.formulaFocus].includes(state)) return;
-    let TeX = activeFormulas[0].main.toTex();
+    if (selected.formulas.length != 1 || state!=state.FORMULA) return;
+    let TeX = selected.formulas[0].main.toTex();
     if (TeX) {
         navigator.clipboard.writeText(TeX);
     }
@@ -8,9 +8,9 @@ function cmCopy(event){
 }
 
 async function cmEdit(event){
-    if(activeFormulas.length==1 && activeFormulas[0].main instanceof Formula){
+    if(selected.formulas.length==1 && selected.formulas[0].main instanceof Formula){
         menu.classList.remove("active-cm");
-        replaceFormula(await formulaInput(activeFormulas[0].main.toTex()), activeFormulas[0].HTML);
+        replaceFormula(await formulaInput(selected.formulas[0].main.toTex()), selected.formulas[0].HTML);
     }
 }
 
@@ -20,8 +20,8 @@ async function cmPaste(event){
     try{
         let text = await navigator.clipboard.readText();
         let formula = formulaFromTeX(text);
-        if(activeFormulas.length==1 && activeFormulas[0].main instanceof Formula){
-            insertFormula(formula, activeFormulas[0].HTML.parentElement.parentElement)
+        if(selected.formulas.length==1 && selected.formulas[0].main instanceof Formula){
+            insertFormula(formula, selected.formulas[0].HTML.parentElement.parentElement)
         }else{
             insertFormula(formula);
         }
@@ -33,7 +33,7 @@ async function cmPaste(event){
 }
 
 function cmDelete(event){
-    for(let active of activeFormulas){
+    for(let active of selected.formulas){
         if(active.main instanceof Formula) deleteContent(active.HTML.parentElement.parentElement)
     }
 }

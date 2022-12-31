@@ -147,7 +147,7 @@
 
         document.addEventListener("click", event => {
             menu.classList.remove("active-cm");
-        }, false);
+        }, true);
 
         menu.addEventListener("click", event => {
             menu.classList.remove("active-cm");
@@ -159,7 +159,9 @@
     
     <script src="src/interactive_field.js"></script>
     <script src="src/input.js"></script>
-    <script src="src/formulas/active.js"></script>
+    <script src="src/active.js"></script>
+    <script src="src/texts.js"></script>
+    <script src="src/formulas/active_formulas.js"></script>
     <script src="src/formulas/set_handlers.js"></script>
     <script src="src/formulas/actions.js"></script>
     <script src="src/context_menu.js"></script>
