@@ -95,7 +95,7 @@ function replaceFormula(formula,elem){
 
 /**
  * Add formula element to interactiveField
- * @param {Formula} formula formula to be inserted
+ * @param {string} text formula to be inserted
  * @param {?HTMLElement} before insert before 
  */
  function insertText(text, before) {

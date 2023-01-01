@@ -1,29 +1,40 @@
 function cmCopy(event){
-    if (selected.formulas.length != 1 || state!=state.FORMULA) return;
-    let TeX = selected.formulas[0].main.toTex();
-    if (TeX) {
-        navigator.clipboard.writeText(TeX);
+    if(state==state.FORMULA && selected.formulas.length == 1){
+        let TeX = selected.formulas[0].main.toTex();
+        if (TeX) {
+            navigator.clipboard.writeText(`$$${TeX}$$`);
+        }
+        event.preventDefault();
     }
-    event.preventDefault();
+    if(state==state.TEXT && selected.texts.length == 1){
+        navigator.clipboard.writeText(selected.texts[0].text);
+        event.preventDefault();
+    }
 }
 
-async function cmEdit(event){
-    if(selected.formulas.length==1 && selected.formulas[0].main instanceof Formula){
+async function cmEdit(){
+    if(state==state.FORMULA && selected.formulas.length==1 && selected.formulas[0].main instanceof Formula){
         menu.classList.remove("active-cm");
         replaceFormula(await formulaInput(selected.formulas[0].main.toTex()), selected.formulas[0].HTML);
+    }
+    if(state==state.TEXT && selected.texts.length == 1){
+        menu.classList.remove("active-cm");
+        let elem = selected.texts[0].HTML;
+        insertText(await textInput(selected.texts[0].text), elem);
+        deleteContent(elem);
     }
 }
 
 async function cmPaste(event){
-    if(event.target.tagName=="TEXTAREA") return;
-    console.log(event.target);
+    if(state==state.DIS || event.target.tagName=="TEXTAREA") return;
     try{
         let text = await navigator.clipboard.readText();
-        let formula = formulaFromTeX(text);
-        if(selected.formulas.length==1 && selected.formulas[0].main instanceof Formula){
-            insertFormula(formula, selected.formulas[0].HTML.parentElement.parentElement)
-        }else{
+        if(text.startsWith("$$") && text.endsWith("$$")){
+            let formula = formulaFromTeX(text.slice(2,-2));
             insertFormula(formula);
+        }else{
+            if(!checkText(text)) throw new Error();
+            insertText(text);
         }
     }catch{
         console.log("Can not paste formula");
@@ -32,9 +43,13 @@ async function cmPaste(event){
     event.preventDefault();
 }
 
-function cmDelete(event){
+function cmDelete(){
+    if(state==state.DIS) return;
     for(let active of selected.formulas){
         if(active.main instanceof Formula) deleteContent(active.HTML.parentElement.parentElement)
+    }
+    for(let active of selected.texts){
+        deleteContent(active.HTML);
     }
 }
 
