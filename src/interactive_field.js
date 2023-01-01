@@ -76,7 +76,7 @@ function insertFormula(formula, before) {
 
     MathJax.typeset([elem]);
     insertContent(elem, before);
-    prepareHTML(elem, formula);
+    prepareHTML(elem, formula.copy());
 }
 
 /**

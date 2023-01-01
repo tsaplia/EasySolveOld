@@ -14,7 +14,8 @@ function _wrapPart(newPart, active, focused=false) {
         active.formula.equalityParts.push(newPart);
         return active.formula.copy();
     }
-    return active.formula.copyWithModifiedPart(newPart, active.term);
+    return active.formula.copyWithModifiedPart(newPart, active.term, newPartMode==newPartModes.newLine);
+
 }
 
 /**

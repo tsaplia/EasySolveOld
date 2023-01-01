@@ -100,7 +100,7 @@ function _prepareEqualityParts(root, formula) {
             group.appendChild(next);
             next = group.nextElementSibling;
         }
-        prepareTerms(group, formula.equalityParts[i]);
+        if(i==0 || i==formula.equalityParts.length-1) prepareTerms(group, formula.equalityParts[i]);
 
         if (next) group = _wrap(next.nextElementSibling, classNames.equalityPart);
     }

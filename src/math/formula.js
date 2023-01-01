@@ -92,12 +92,19 @@ class Formula extends MathStructure {
      * @param {Term} term  term from active part
      * @return {Formula}
      */
-    copyWithModifiedPart(part, term) {
-        if (this._getActivePart(term) == this.rightPart()) {
-            return new Formula([this.leftPart(), part]);
+    copyWithModifiedPart(part, term, removeMiddle=true) {
+        let newFormula = this.copy();
+        if (this._getActivePart(term) == this.rightPart()){
+            newFormula.equalityParts[newFormula.equalityParts.length-1] = part;
+        }else{
+            newFormula.equalityParts[0] = part;
         }
-
-        return new Formula([part, this.rightPart().copy()]);
+        if(removeMiddle) {
+            return new Formula([newFormula.leftPart(), newFormula.rightPart()]);
+        }
+        else {
+            return newFormula;
+        }
     }
 
     /**
@@ -173,17 +180,17 @@ class Formula extends MathStructure {
         for(let item of term.content){
             if(item==mult) continue;
             if(!(item instanceof Frac)){
-                rightPart.content[0].devide(item);
+                rightPart.content[0].devide(item.copy());
                 continue;
             }
             if(item.numerator.sign=='-') rightPart.content[0].changeSign();
             if(item.denomerator.sign=='-') rightPart.content[0].changeSign();
             for(let itemN of item.numerator.content){
-                if(itemN!=mult) rightPart.content[0].devide(itemN);
+                if(itemN!=mult) rightPart.content[0].devide(itemN.copy());
             }
             for(let itemD of item.denomerator.content){
                 if(itemD==mult) inverted = true;
-                else rightPart.content[0].mul(itemD);
+                else rightPart.content[0].mul(itemD.copy());
             }
         }
         if (inverted) {
@@ -213,7 +220,7 @@ class Formula extends MathStructure {
         termCopy.content.splice(term.content.indexOf(block), 1);
         block.content.forEach((item) => {
             let newTerm = termCopy.copy();
-            newTerm.mul(item);
+            newTerm.mul(item.copy());
             newTerms.push(newTerm);
         });
 
