@@ -25,7 +25,7 @@ class Term {
 
     /** @return {Term} copy of term without copying multipliers*/
     copy() {
-        return new Term([...this.content], this.sign);
+        return new Term(this.content.map((mult) => mult.copy()), this.sign)
     }
 
     isEqual(other) {

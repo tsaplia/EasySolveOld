@@ -120,7 +120,7 @@ class Formula extends MathStructure {
         let newPart = this._getActivePart(oldTerms[0]).copy();
         if (newTerm) newPart.content.push(newTerm);
         for (let term of oldTerms) {
-            newPart.content.splice(newPart.content.indexOf(newPart.content.find((el) => el.isEqual(term))), 1);
+            newPart.content.splice(newPart.content.findIndex((el) => el.isEqual(term)), 1);
         }
         return newPart;
     }
@@ -169,28 +169,23 @@ class Formula extends MathStructure {
             rightPart = Block.wrap(rightPart);
         }
 
-        leftPart.content[0].transformToFrac();
-
         let inverted = false;
-        for (let item of leftPart.content[0].content[0].denomerator.content) {
-            if (item === mult) {
-                inverted = true;
+        for(let item of term.content){
+            if(item==mult) continue;
+            if(!(item instanceof Frac)){
+                rightPart.content[0].devide(item);
                 continue;
             }
-
-            rightPart.content[0].mul(item);
-        }
-        if (leftPart.content[0].content[0].denomerator.sign == "-") rightPart.content[0].changeSign();
-
-        for (let item of leftPart.content[0].content[0].numerator.content) {
-            if (item === mult) {
-                continue;
+            if(item.numerator.sign=='-') rightPart.content[0].changeSign();
+            if(item.denomerator.sign=='-') rightPart.content[0].changeSign();
+            for(let itemN of item.numerator.content){
+                if(itemN!=mult) rightPart.content[0].devide(itemN);
             }
-
-            rightPart.content[0].devide(item);
+            for(let itemD of item.denomerator.content){
+                if(itemD==mult) inverted = true;
+                else rightPart.content[0].mul(itemD);
+            }
         }
-        if (leftPart.content[0].content[0].numerator.sign == "-") rightPart.content[0].changeSign();
-
         if (inverted) {
             rightPart.content[0].transformToFrac();
             rightPart.content[0].content[0].invert();
@@ -215,7 +210,7 @@ class Formula extends MathStructure {
         let newTerms = [];
 
         let termCopy = term.copy();
-        termCopy.content.splice(termCopy.content.indexOf(block), 1);
+        termCopy.content.splice(term.content.indexOf(block), 1);
         block.content.forEach((item) => {
             let newTerm = termCopy.copy();
             newTerm.mul(item);
@@ -223,8 +218,9 @@ class Formula extends MathStructure {
         });
 
         for (let i = 0; i < part.content.length; i++) {
-            if (part.content[i].content.includes(block)) {
+            if (this._getActivePart(term).content[i].content.includes(block)) {
                 part.content.splice(i, 1, ...newTerms);
+                break;
             }
         }
         part.simplify();
@@ -263,12 +259,10 @@ class Formula extends MathStructure {
     substituteTerm(term, otherFormula) {
         let part = this._getActivePart(term).copy();
         for (let i = 0; i < part.content.length; i++) {
-            if (!part.content[i].isEqual(term)) {
-                continue;
+            if (part.content[i].isEqual(term)) {
+                part.content.splice(i, 1, ...otherFormula.rightPart().copy().content);
+                break;
             }
-
-            part.content.splice(i, 1, ...otherFormula.rightPart().copy().content);
-            break;
         }
         part.simplify();
         return part;
@@ -287,8 +281,8 @@ class Formula extends MathStructure {
         let inserted = otherFormula.rightPart().content.length == 1 ?
             otherFormula.rightPart().content[0] : new Term([otherFormula.rightPart()]);
 
-        for (let i = 0; i < newTerm.content.length; i++) {
-            let item = newTerm.content[i];
+        for (let i = 0; i < term.content.length; i++) {
+            let item = term.content[i];
             // for non fraction mult
             if (item == mult) {
                 newTerm.content.splice(i, 1, ...inserted.content);
@@ -304,12 +298,12 @@ class Formula extends MathStructure {
             let frac = item.copy();
             let wrap = new Term([frac]);
 
-            if (frac.numerator.content.includes(mult)) {
-                frac.numerator.content.splice(frac.numerator.content.indexOf(mult), 1);
+            if (item.numerator.content.includes(mult)) {
+                frac.numerator.content.splice(item.numerator.content.indexOf(mult), 1);
                 wrap.mul(inserted);
             }
-            if (frac.denomerator.content.includes(mult)) {
-                frac.denomerator.content.splice(frac.numerator.content.indexOf(mult), 1);
+            if (item.denomerator.content.includes(mult)) {
+                frac.denomerator.content.splice(item.numerator.content.indexOf(mult), 1);
                 wrap.devide(inserted);
             }
             frac.denomerator.removeExtraBlocks();
