@@ -10,23 +10,22 @@ function _wrapPart(newPart, active, focused=false) {
         newPart = active.formula.substituteMultiplier(active.mult, active.term, new Formula([newPart]));
         return _wrapPart(newPart, active);
     }
-    if(newPartMode==newPartModes.addToEnd){
+    if (newPartMode==newPartModes.addToEnd) {
         active.formula.equalityParts.push(newPart);
         return active.formula.copy();
     }
     return active.formula.copyWithModifiedPart(newPart, active.term, newPartMode==newPartModes.newLine);
-
 }
 
 /**
  * Insert formula to IF depanding on newPartMode
- * @param {Formula} formula 
+ * @param {Formula} formula
  * @param {HTMLElement} activeHTML rendered active elment
  */
-function _addFormula(formula, activeHTML){
-    if(newPartMode == newPartModes.newLine){
+function _addFormula(formula, activeHTML) {
+    if (newPartMode == newPartModes.newLine) {
         insertFormula(formula);
-    }else{
+    } else {
         replaceFormula(formula, activeHTML);
     }
 }
@@ -42,7 +41,7 @@ let formulaActions = [
         caller() {
             if (_getActiveType(selected.formulas[0]) == _activeTypes.term) {
                 insertFormula( selected.formulas[0].formula.separateTerm(selected.formulas[0].main));
-            }else{
+            } else {
                 insertFormula(selected.formulas[0].formula.separateMultiplier(selected.formulas[0].main,
                     selected.formulas[0].term));
             }
@@ -75,7 +74,9 @@ let formulaActions = [
     {
         buttonId: "common-denominator-btn",
         check() {
-            if (selected.formulas.length<2 || !selected.formulas.every((item) => item.main instanceof Term)) return false;
+            if (selected.formulas.length<2 || !selected.formulas.every((item) => item.main instanceof Term)) {
+                return false;
+            }
             let part = selected.formulas[0].formula._getActivePart(selected.formulas[0].main);
             return selected.formulas.every((item) => item.formula._getActivePart(item.main)==part);
         },
@@ -84,7 +85,7 @@ let formulaActions = [
             let newPart = selected.formulas[0].formula.toCommonDenominator(...terms);
             let focused = (focusFormulaConfig &&
                 selected.formulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused), 
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused),
                 selected.formulas[0].HTML);
         },
     },
@@ -95,21 +96,25 @@ let formulaActions = [
         },
         caller() {
             let newPart;
-            if(selected.formulas[0].term.content.includes(selected.formulas[0].main)){
-                newPart = selected.formulas[0].formula.openBrackets(selected.formulas[0].main, selected.formulas[0].term);
-            }else{
-                newPart = selected.formulas[0].formula.openBracketsFrac(selected.formulas[0].main, selected.formulas[0].term);
+            if (selected.formulas[0].term.content.includes(selected.formulas[0].main)) {
+                newPart = selected.formulas[0].formula.openBrackets(selected.formulas[0].main,
+                    selected.formulas[0].term);
+            } else {
+                newPart = selected.formulas[0].formula.openBracketsFrac(selected.formulas[0].main,
+                    selected.formulas[0].term);
             }
             let focused = (focusFormulaConfig &&
                 selected.formulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused), 
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused),
                 selected.formulas[0].HTML);
         },
     },
     {
         buttonId: "out-bracket-btn",
         check() {
-            if (selected.formulas.length<2 || !selected.formulas.every((item) => item.main instanceof Term)) return false;
+            if (selected.formulas.length<2 || !selected.formulas.every((item) => item.main instanceof Term)) {
+                return false;
+            }
             let part = selected.formulas[0].formula._getActivePart(selected.formulas[0].main);
             return selected.formulas.every((item) => item.formula._getActivePart(item.main)==part);
         },
@@ -121,7 +126,7 @@ let formulaActions = [
             let newPart = selected.formulas[0].formula.moveOutOfBracket(terms, multBlock);
             let focused = (focusFormulaConfig &&
                 selected.formulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused), 
+            _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused),
                 selected.formulas[0].HTML);
         },
     },
@@ -192,7 +197,7 @@ let formulaActions = [
                 };
                 formulaHandler(new Formula([focusFormulaConfig.path.main]), focusFormulaConfig.path.HTML);
                 prepareTerms(focusFormulaConfig.path.HTML, focusFormulaConfig.path.main);
-            }else if(focusFormulaConfig){
+            } else if (focusFormulaConfig) {
                 document.querySelector(`#${this.buttonId}`).innerHTML = "Focus";
                 for (let handler of focusFormulaConfig.handlers) {
                     handler.target.removeEventListener("click", handler.func);
@@ -202,5 +207,5 @@ let formulaActions = [
             }
             deleteActiveAll();
         },
-    }
+    },
 ];

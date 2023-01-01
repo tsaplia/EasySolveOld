@@ -63,14 +63,29 @@ body{
     background-color: aliceblue;
 }
 
+html, body{
+    height: 100%;
+}
+
 .in-function, .in-term, .in-equality-part{
     display: inline-block;
 }
 
 .input-form{
-    background-color: aliceblue;
+    background-color: white;
 }
 .input-error{
     color: #dc3545ed!important;
     display: none;
+}
+
+#black-bg{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.637);
 }

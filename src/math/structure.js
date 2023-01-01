@@ -92,8 +92,8 @@ class Sqrt extends MathStructure {
         return this.root.isEqual(other.root) && this.content.isEqual(other.content);
     }
 
-    copy(){
-        return new Sqrt(this.content.copy(),this.root.copy())
+    copy() {
+        return new Sqrt(this.content.copy(), this.root.copy());
     }
 }
 
@@ -132,7 +132,7 @@ class Power extends MathStructure {
             this.base.isEqual(other.base);
     }
 
-    copy(){
+    copy() {
         return new Power(this.base.copy(), this.exponent.copy());
     }
 
@@ -185,7 +185,7 @@ class Variable extends MathStructure {
         return this.name === other.name;
     }
 
-    copy(){
+    copy() {
         return new Variable(this.name, this.index, this.vector, this.primeCount);
     }
 }
@@ -212,7 +212,7 @@ class Func extends MathStructure {
         return this.name === other.name && this.content.isEqual(other.content);
     }
 
-    copy(){
+    copy() {
         return new Func(this.name, this.content.copy);
     }
 }
@@ -240,7 +240,7 @@ class Num extends MathStructure {
         return this.value === other.value;
     }
 
-    copy(){
+    copy() {
         return new Num(this.value);
     }
 

@@ -1,11 +1,12 @@
 
 /**
- * @typedef {{main: MathStructure, HTML: HTMLElement , mult: ?MathStructure, term: ?Term, formula: ?Formula}} ActiveFormula
+ * @typedef {{main: MathStructure, HTML: HTMLElement , mult: ?MathStructure, term: ?Term, formula: ?Formula}}
+ *ActiveFormula
  * Description of active formula element
  * @typedef {{HTML: HTMLElement, text:string}} ActiveText Description of active text element
  */
 
-let interactiveField = document.querySelector(".interactive"); 
+let interactiveField = document.querySelector(".interactive");
 
 /**
  * @type {{formulas: Array<ActiveFormula>, texts:Array<ActiveText>}}
@@ -13,14 +14,14 @@ let interactiveField = document.querySelector(".interactive");
 let selected = {
     formulas: [],
     texts: [],
-}
+};
 
 let state = {
-    valueOf(){
-        if(this.disable) return this.DIS;
-        if(selected.formulas.length && selected.texts.length) return this.UNDEF;
-        if(selected.formulas.length) return this.FORMULA;
-        if(selected.texts.length) return this.TEXT;
+    valueOf() {
+        if (this.disable) return this.DIS;
+        if (selected.formulas.length && selected.texts.length) return this.UNDEF;
+        if (selected.formulas.length) return this.FORMULA;
+        if (selected.texts.length) return this.TEXT;
         return this.NONE;
     },
     disable: false,
@@ -28,14 +29,14 @@ let state = {
     NONE: 1,
     UNDEF: 2,
     FORMULA: 3,
-    TEXT:4
-}
+    TEXT: 4,
+};
 let newPartModes = {
     newLine: 0,
     addToEnd: 1,
-    replace: 2
-}
-/**@type {number} */
+    replace: 2,
+};
+/** @type {number} */
 let newPartMode = newPartModes.addToEnd;
 
 /**
@@ -44,14 +45,14 @@ let newPartMode = newPartModes.addToEnd;
 let focusFormulaConfig = null;
 
 /**
- * @param {HTMLElement} elem 
- * @param {?HTMLElement} before 
+ * @param {HTMLElement} elem
+ * @param {?HTMLElement} before
  */
 function insertContent(elem, before) {
     deleteActiveAll();
-    if(before){
-        interactiveField.insertBefore(elem,before);
-    }else{
+    if (before) {
+        interactiveField.insertBefore(elem, before);
+    } else {
         interactiveField.append(elem);
     }
 }
@@ -59,7 +60,7 @@ function insertContent(elem, before) {
 /**
  * @param {HTMLElement} elem element fith formula to be deleted
  */
-function deleteContent(elem){
+function deleteContent(elem) {
     deleteActiveAll();
     interactiveField.removeChild(elem);
 }
@@ -67,7 +68,7 @@ function deleteContent(elem){
 /**
  * Add formula element to interactiveField
  * @param {Formula} formula formula to be inserted
- * @param {?HTMLElement} before insert before 
+ * @param {?HTMLElement} before insert before
  */
 function insertFormula(formula, before) {
     let elem = document.createElement("div");
@@ -84,9 +85,9 @@ function insertFormula(formula, before) {
  * @param {Formula} formula new formula
  * @param {HTMLElement} elem displayed formula/part of formula
  */
-function replaceFormula(formula,elem){
-    for(let main of interactiveField.children){
-        if(main.contains(elem)){
+function replaceFormula(formula, elem) {
+    for (let main of interactiveField.children) {
+        if (main.contains(elem)) {
             insertFormula(formula, main);
             deleteContent(main);
         }
@@ -96,9 +97,9 @@ function replaceFormula(formula,elem){
 /**
  * Add formula element to interactiveField
  * @param {string} text formula to be inserted
- * @param {?HTMLElement} before insert before 
+ * @param {?HTMLElement} before insert before
  */
- function insertText(text, before) {
+function insertText(text, before) {
     let elem = document.createElement("div");
     elem.innerHTML = text;
     elem.className = "content-text";

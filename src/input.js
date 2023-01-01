@@ -1,6 +1,7 @@
 let formulaInputBox = document.querySelector(".math-input");
 let textInputBox = document.querySelector(".text-input");
 let textInputArea = document.querySelector(".text-input-area");
+let blackBG = document.querySelector("#black-bg");
 
 const mqConfig = {
     supSubsRequireOperand: true,
@@ -13,15 +14,22 @@ const mqConfig = {
 const formulaInputField = MQ.MathField(document.querySelector("#mq-math-field"), mqConfig);
 const mathInputField = MQ.MathField(document.querySelector("#mq-text-field"), mqConfig);
 
-function _prepareInput(inputBox){
+function _prepareInput(inputBox) {
     document.querySelectorAll(".dropdown-menu.show").forEach((el)=>el.classList.remove("show"));
     inputBox.style.display = "flex";
+    blackBG.style.display = "block";
     state.disable = true;
 }
 
-function _removeInput(inputBox){
+function _showIncorrect(inputBox) {
+    inputBox.querySelector("small").style.display = "block";
+}
+
+function _removeInput(inputBox) {
     inputBox.style.display = "none";
+    blackBG.style.display = "none";
     state.disable = false;
+    inputBox.querySelector("small").style.display = "none";
 }
 
 function _getFormulaInput() {
@@ -35,14 +43,14 @@ function _getFormulaInput() {
 async function formulaInput(defaultTeX="") {
     _prepareInput(formulaInputBox);
     formulaInputField.latex(defaultTeX);
-
+    formulaInputField.focus();
     let formula = null;
     while (!formula) {
         let userInput = await _getFormulaInput();
         try {
             formula = formulaFromTeX(userInput);
         } catch (error) {
-            console.log(error);
+            _showIncorrect(formulaInputBox);
         }
     }
     formulaInputField.latex("");
@@ -63,9 +71,11 @@ function _getTextInput() {
 async function textInput(defaultTeX="") {
     _prepareInput(textInputBox);
     textInputArea.value = defaultTeX;
-    
+    textInputArea.focus();
+
     let text = await _getTextInput();
     while (!checkText(text)) {
+        _showIncorrect(textInputBox);
         text = await _getTextInput();
     }
     _removeInput(textInputBox);
