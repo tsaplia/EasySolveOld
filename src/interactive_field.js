@@ -45,10 +45,21 @@ let newPartMode = newPartModes.addToEnd;
 let focusFormulaConfig = null;
 
 /**
+ * TeX related to each IF element
+ */
+let contentTeX = {};
+let curHash = 0; // hash for HTMLElements to using in Content js
+
+
+/**
  * @param {HTMLElement} elem
  * @param {?HTMLElement} before
+ * @param {string} TeX
  */
-function insertContent(elem, before) {
+function insertContent(TeX, elem, before) {
+    elem.hashId = `hash_`+curHash++;
+    contentTeX[elem.hashId] = TeX;
+
     deleteActiveAll();
     if (before) {
         interactiveField.insertBefore(elem, before);
@@ -61,6 +72,7 @@ function insertContent(elem, before) {
  * @param {HTMLElement} elem element fith formula to be deleted
  */
 function deleteContent(elem) {
+    delete contentTeX[elem.hashId];
     deleteActiveAll();
     interactiveField.removeChild(elem);
 }
@@ -76,7 +88,7 @@ function insertFormula(formula, before) {
     elem.className = "content-formula";
 
     MathJax.typeset([elem]);
-    insertContent(elem, before);
+    insertContent(`$$${formula.toTex()}$$`, elem, before);
     prepareHTML(elem, formula.copy());
 }
 
@@ -105,7 +117,7 @@ function insertText(text, before) {
     elem.className = "content-text";
 
     MathJax.typeset([elem]);
-    insertContent(elem, before);
+    insertContent(text, elem, before);
     textHandler(elem, text);
 }
 

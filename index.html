@@ -45,6 +45,17 @@
         <div class="toolbar">
             <div class="btn-group tool-bow mt-2" role="group" >
                 <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        File
+                    </button>
+                    <ul class="dropdown-menu insert-dm">
+                        <li class="dropdown-item" id="open-file">#Open</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-item" id="save-image">#Save as Image</li>
+                        <li class="dropdown-item" id="save-latex">Save as LaTeX</li>
+                    </ul>
+                </div>
+                <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle insert-btn" data-bs-toggle="dropdown" aria-expanded="false">
                         Insert
                     </button>
@@ -167,4 +178,5 @@
     <script src="src/formulas/actions.js"></script>
     <script src="src/context_menu.js"></script>
     <script src="src/past.js"></script>
+    <script src="src/file_menu.js"></script>
 </html>
