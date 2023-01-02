@@ -46,19 +46,18 @@ let focusFormulaConfig = null;
 
 /**
  * TeX related to each IF element
+ * @type {Array<{TeX: string, elem: HTMLElement}>}
  */
-let contentTeX = {};
-let curHash = 0; // hash for HTMLElements to using in Content js
+let contentTeX = [];
 
 
 /**
+ * @param {string} TeX
  * @param {HTMLElement} elem
  * @param {?HTMLElement} before
- * @param {string} TeX
  */
 function insertContent(TeX, elem, before) {
-    elem.hashId = `hash_`+curHash++;
-    contentTeX[elem.hashId] = TeX;
+    contentTeX.push({TeX: TeX, elem: elem});
 
     deleteActiveAll();
     if (before) {
@@ -72,9 +71,16 @@ function insertContent(TeX, elem, before) {
  * @param {HTMLElement} elem element fith formula to be deleted
  */
 function deleteContent(elem) {
-    delete contentTeX[elem.hashId];
+    delete contentTeX[contentTeX.findIndex((obj)=>obj.elem==elem)];
     deleteActiveAll();
     interactiveField.removeChild(elem);
+}
+
+/** delete all elements from IF */
+function clearContent() {
+    for (let child of interactiveField.children) {
+        deleteContent(child);
+    }
 }
 
 /**
@@ -119,5 +125,20 @@ function insertText(text, before) {
     MathJax.typeset([elem]);
     insertContent(text, elem, before);
     textHandler(elem, text);
+}
+
+function insertTeX(text) {
+    try {
+        if (text.startsWith("$$") && text.endsWith("$$")) {
+            let formula = formulaFromTeX(text.slice(2, -2));
+            insertFormula(formula);
+        } else {
+            if (!checkText(text)) throw new Error();
+            insertText(text);
+        }
+    } catch (e) {
+        console.log(e, "Can not insert content");
+        return;
+    }
 }
 

@@ -27,19 +27,7 @@ async function cmEdit() {
 
 async function cmPaste(event) {
     if (state==state.DIS || event.target.tagName=="TEXTAREA") return;
-    try {
-        let text = await navigator.clipboard.readText();
-        if (text.startsWith("$$") && text.endsWith("$$")) {
-            let formula = formulaFromTeX(text.slice(2, -2));
-            insertFormula(formula);
-        } else {
-            if (!checkText(text)) throw new Error();
-            insertText(text);
-        }
-    } catch {
-        console.log("Can not paste formula");
-        return;
-    }
+    insertTeX(await navigator.clipboard.readText());
     event.preventDefault();
 }
 

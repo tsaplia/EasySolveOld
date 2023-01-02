@@ -18,7 +18,7 @@ document.querySelector(".insert-text-btn").addEventListener("click", async ()=>{
 
 document.querySelector(".insert-math-btn").addEventListener("click", ()=>{
     if (mathInputField.latex()) {
-        textInputArea.value += ` \\(${mathInputField.latex()}\\) `;
+        textInputArea.value += ` $${mathInputField.latex()}$ `;
         mathInputField.latex("");
         textInputArea.focus();
     }

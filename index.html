@@ -20,6 +20,16 @@
                     assistiveMml: []
                 }
             },
+            tex: {
+                inlineMath: [              
+                    ['\\(', '\\)'],
+                    ['$', '$']
+                ],
+                displayMath: [ 
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+            }
         };
     </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -50,7 +60,10 @@
                         File
                     </button>
                     <ul class="dropdown-menu insert-dm">
-                        <li class="dropdown-item" id="open-file">#Open</li>
+                        <li class="dropdown-item" id="open-file">
+                            <label for="file-input">Open</label>
+                            <input type="file" name="file-input" id="file-input" accept=".tex">
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li class="dropdown-item" id="save-image">Save as Image</li>
                         <li class="dropdown-item" id="save-latex">Save as LaTeX</li>
