@@ -30,6 +30,7 @@
         let MQ = MathQuill.getInterface(2);
     </script>
     <script src="https://kit.fontawesome.com/80f9fef578.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
 
     <script src="src/basic.js"></script>
     <script src="src/math/structure.js"></script>
@@ -51,7 +52,7 @@
                     <ul class="dropdown-menu insert-dm">
                         <li class="dropdown-item" id="open-file">#Open</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="save-image">#Save as Image</li>
+                        <li class="dropdown-item" id="save-image">Save as Image</li>
                         <li class="dropdown-item" id="save-latex">Save as LaTeX</li>
                     </ul>
                 </div>
@@ -146,6 +147,15 @@
         
     </div>
     <div id="black-bg"></div>
+    <div id="shot-box" class="py-5">
+		<div class=" d-flex flex-column justify-content-center align-items-center">
+			<div id="screenshot"></div>
+            <div class="text-center">
+                <button id="save-shot" class="btn btn-primary">Save it</button>
+                <button id="cancel-shot"  class="btn btn-primary">Cancel</button>
+            </div>
+		</div>
+	</div>
     <script>
         const menuArea = document.querySelector(".interactive");
         const menu = document.querySelector(".context-menu");

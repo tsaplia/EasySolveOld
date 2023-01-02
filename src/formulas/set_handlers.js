@@ -180,7 +180,7 @@ function _prepareFraction(root, term) {
     }
 
     for (let multInd = 0, elemInd = 0; multInd < term.content.length; multInd++, elemInd++) {
-        while (root.children[elemInd].classList.contains("mjx-mo")) elemInd++;
+        while (root.children[elemInd].tagName=="MJX-MO") elemInd++;
 
         multiplierHandler(term.content[multInd], root.children[elemInd]);
     }
