@@ -55,58 +55,57 @@
         <div class="toolbar">
             <div class="btn-group mt-2" role="group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    File
+                    Файл
                 </button>
                 <ul class="dropdown-menu insert-dm">
                     <li class="dropdown-item" id="open-file">
-                        <label for="file-input">Open</label>
+                        <label for="file-input">Відкрити</label>
                         <input type="file" name="file-input" id="file-input" accept=".tex">
                     </li>
                     <li><hr class="dropdown-divider"></li>
-                    <li class="dropdown-item" id="save-image">Save as Image</li>
-                    <li class="dropdown-item" id="save-latex">Save as LaTeX</li>
+                    <li class="dropdown-item" id="save-image">Зберегти як зображення</li>
+                    <li class="dropdown-item" id="save-latex">Зберегти як LaTeX</li>
                 </ul>
             </div>
             <div class="btn-group tool-bow mt-2" role="group" >
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle insert-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        Insert
+                        Вставлення
                     </button>
                     <ul class="dropdown-menu insert-dm">
-                        <li class="dropdown-item insert-formula-btn">Formula</li>
-                        <li class="dropdown-item insert-text-btn">Text</li>
+                        <li class="dropdown-item insert-formula-btn">Формула</li>
+                        <li class="dropdown-item insert-text-btn">Текст</li>
                     </ul>
                 </div>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle formulas-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        Formulas
+                        Дії з формулами
                     </button>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-item" id="separate-btn">Separate</li>
-                        <li class="dropdown-item" id="substitute-btn">Substitute</li>
+                        <li class="dropdown-item" id="separate-btn">Виразити</li>
+                        <li class="dropdown-item" id="substitute-btn">Підставити</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="common-denominator-btn">To common denominator</li>
+                        <li class="dropdown-item" id="common-denominator-btn">Звести до спільного знаменника</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="open-bracket-btn">Open bracket</li>
-                        <li class="dropdown-item" id="out-bracket-btn">Move out of bracket</li>
+                        <li class="dropdown-item" id="open-bracket-btn">Розкрити дужки</li>
+                        <li class="dropdown-item" id="out-bracket-btn">Винести множник за дужки</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="multiply-btn">Multiply</li>
-                        <li class="dropdown-item" id="remove-eponent-btn">Remove eponent</li>
+                        <li class="dropdown-item" id="remove-eponent-btn">Позбавитись ступеню</li>
+                        <li class="dropdown-item" id="multiply-btn">Помножити рівняння на</li>
+                        <li class="dropdown-item" id="add-btn">Додати рівняння</li>
+                        <li class="dropdown-item" id="substract-btn">Відняти рівняння</li>
+                        <li class="dropdown-item" id="devide-btn">Ділити рівняння</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="add-btn">Add</li>
-                        <li class="dropdown-item" id="substract-btn">Substract</li>
-                        <li class="dropdown-item" id="devide-btn">Devide</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="focus-btn">Focus</li>
+                        <li class="dropdown-item" id="focus-btn">Сфокусувати</li>
                     </ul>
                 </div>
             </div>
             <div class="btn-group mt-2" role="group" >
-                <input type="radio" class="btn-check" name="new-part-mod" id="mod-0" autocomplete="off" value="0">
+                <input type="radio" class="btn-check" name="new-part-mod" id="mod-0" autocomplete="off" value="0" checked>
                 <label class="btn btn-outline-primary" for="mod-0">
                     <i class="bi bi-arrow-return-left"></i>
                 </label>
-                <input type="radio" class="btn-check" name="new-part-mod" id="mod-1" autocomplete="off" value="1" checked>
+                <input type="radio" class="btn-check" name="new-part-mod" id="mod-1" autocomplete="off" value="1">
                 <label class="btn btn-outline-primary" for="mod-1">
                     <i class="bi bi-arrow-bar-right"></i>
                 </label>
@@ -118,39 +117,38 @@
         </div>
         <div class="row justify-content-center math-input mt-4" >
             <div class="col-md-8 col-sm-10 pt-2 pb-4 input-form rounded shadow-sm">
-                <label for="mq-math-field" class="form-label">Enter math</label>
+                <label for="mq-math-field" class="form-label">Введіть формулу</label>
                 <div class="input-group ">
                     <span id="mq-math-field" class="form-control"></span>
-                    <button class="btn btn-primary formula-ready" type="button">Ready</button>
+                    <button class="btn btn-primary formula-ready" type="button">OK</button>
                 </div>
-                <small id="math-input-error" class="form-text text-muted input-error">Invalid text. Please check ...</small>
+                <small id="math-input-error" class="form-text text-muted input-error">Введена неможлива формула...</small>
             </div>
         </div>
         <div class="row justify-content-center text-input mt-4">
             <div class="col-md-8 col-sm-10 pt-2 input-form rounded shadow-sm">
                 <div class="mb-3">
-                    <label for="mq-text-field" class="form-label">Enter formula to unsert to text</label>
+                    <label for="mq-text-field" class="form-label">Введіть формулу для вставлення в текст</label>
                     <div class="input-group ">
                         <span class="form-control" id="mq-text-field">
                         </span>
-                        <button class="btn btn-primary insert-math-btn" type="button">Insert ⇓</button>
+                        <button class="btn btn-primary insert-math-btn" type="button">Вставити ⇓</button>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="text-input-field" class="form-label">Enter formula to unsert to text</label>
                     <textarea class="form-control text-input-area" rows="12"></textarea>
-                    <small id="text-input-error" class="form-text text-muted input-error">Invalid formula. Please check ...</small>
+                    <small id="text-input-error" class="form-text text-muted input-error">Введений текст містить помилку ...</small>
                 </div>
-                <button class="btn btn-primary mb-3 text-ready ">Add text</button>
+                <button class="btn btn-primary mb-3 text-ready ">Додати текст</button>
             </div>
         </div>
         <div class="interactive mt-2 p-3 rounded">
         </div>
         <ul class="dropdown-menu context-menu">
-            <li id="copy-btn" class="dropdown-item">Copy</li>
-            <li id="paste-btn" class="dropdown-item">Paste</li>
-            <li id="delete-btn" class="dropdown-item">Delete</li>
-            <li id="edit-btn" class="dropdown-item">Edit</li>
+            <li id="copy-btn" class="dropdown-item">Копіювати</li>
+            <li id="paste-btn" class="dropdown-item">Вставити</li>
+            <li id="delete-btn" class="dropdown-item">Видалити</li>
+            <li id="edit-btn" class="dropdown-item">Редагувати</li>
         </ul>
         
     </div>
@@ -160,8 +158,8 @@
 		<div class=" d-flex flex-column align-items-center">
 			<div id="screenshot"></div>
             <div class="text-center">
-                <button id="save-shot" class="btn btn-primary">Save it</button>
-                <button id="cancel-shot"  class="btn btn-primary">Cancel</button>
+                <button id="save-shot" class="btn btn-primary">Зберегти</button>
+                <button id="cancel-shot"  class="btn btn-primary">Скасувати</button>
             </div>
 		</div>
 	</div>

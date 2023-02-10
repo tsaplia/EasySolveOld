@@ -192,21 +192,21 @@ let formulaActions = [
                 focusFormulaConfig;
         },
         caller() {
-            if (selected.formulas.length==1 && selected.formulas[0].main instanceof Block) {
-                document.querySelector(`#${this.buttonId}`).innerHTML = "Remove focus";
+            if (focusFormulaConfig) {
+                document.querySelector(`#${this.buttonId}`).innerHTML = "Сфокусувати";
+                for (let handler of focusFormulaConfig.handlers) {
+                    handler.target.removeEventListener("click", handler.func);
+                }
+                deleteTermGroups(focusFormulaConfig.path.HTML);
+                focusFormulaConfig = null;
+            }else if (selected.formulas.length==1 && selected.formulas[0].main instanceof Block) {
+                document.querySelector(`#${this.buttonId}`).innerHTML = "Видалити фокус";
                 focusFormulaConfig = {
                     path: selected.formulas[0],
                     handlers: [],
                 };
                 formulaHandler(new Formula([focusFormulaConfig.path.main]), focusFormulaConfig.path.HTML);
                 prepareTerms(focusFormulaConfig.path.HTML, focusFormulaConfig.path.main);
-            } else if (focusFormulaConfig) {
-                document.querySelector(`#${this.buttonId}`).innerHTML = "Focus";
-                for (let handler of focusFormulaConfig.handlers) {
-                    handler.target.removeEventListener("click", handler.func);
-                }
-                deleteTermGroups(focusFormulaConfig.path.HTML);
-                focusFormulaConfig = null;
             }
             deleteActiveAll();
         },
