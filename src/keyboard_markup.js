@@ -238,10 +238,11 @@ let greekKeyboard = [
             width: 10,
             keys: [
                 {
-                    label: "+",
+                    latex: "\\vec{a}",
+                    cmd: "\\vec"
                 },
                 {
-                    label: "-",
+                    cmd: "'",
                 },
                 {
                     cmd: "\\epsilon",

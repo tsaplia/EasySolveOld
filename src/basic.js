@@ -26,6 +26,15 @@ function gcd(a, b) {
     return a;
 }
 
+/**
+ * @param {number} x 
+ * @return {number}
+ */
+function decimalCount(x){
+    let num = x.toString().split(".");
+    return num[1] ? num[1].toString().length : 0;
+}
+
 
 /**
  * @param {Array<number>} a
@@ -39,16 +48,26 @@ function addFractions(a, b) {
 
     let num = a[0]*b[1] + b[0]*a[1];
     let denom = b[1]*a[1];
-
-    let g = gcd(num, denom);
-    num /= g;
-    denom /= g;
-
     if (denom<0) {
         num *= -1;
     }
-
+    [num,denom] = simplifyFrac([num,denom]);
     return [num, denom];
 }
 
+/**
+ * @param {Array<num>} coef 
+ * @return {Array<num>}
+ */
+function simplifyFrac(coef){
+    let exp = Math.max(decimalCount(coef[0]),decimalCount(coef[1]));
+    coef = coef.map(x=>x * 10**exp);
+    let g = gcd(...coef);
+    coef = coef.map(x=>x/g);
+    if(exp && decimalCount(coef[0]/coef[1])<=3){
+        coef[0]/=coef[1];
+        coef[1]=1;
+    }
+    return coef;
+}
 

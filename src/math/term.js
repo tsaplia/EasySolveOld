@@ -230,7 +230,7 @@ class Term {
 
     mergeNumbers() {
         let coef = this.deleteNumbersDeep();
-        this.insertCoef(coef[0] / gcd(...coef), coef[1] / gcd(...coef));
+        this.insertCoef(...simplifyFrac(coef));
         this.emptyContentCheck();
     }
 
