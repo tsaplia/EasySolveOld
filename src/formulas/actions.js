@@ -146,16 +146,6 @@ let formulaActions = [
         },
     },
     {
-        buttonId: "remove-eponent-btn",
-        check() {
-            return selected.formulas.length==1 && selected.formulas[0].main instanceof Power &&
-                selected.formulas[0].formula.isSeparatedMultiplier(selected.formulas[0].main);
-        },
-        caller() {
-            insertFormula(selected.formulas[0].formula.removeExponent(selected.formulas[0].main));
-        },
-    },
-    {
         buttonId: "add-btn",
         check() {
             return selected.formulas.length>=2 &&

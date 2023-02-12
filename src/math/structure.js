@@ -182,7 +182,7 @@ class Variable extends MathStructure {
     isEqual(other) {
         if (!(other instanceof Variable)) return false;
 
-        return this.name === other.name;
+        return this.name === other.name && this.vector==other.vector && this.index == other.index && this.primeCount==other.primeCount;
     }
 
     copy() {

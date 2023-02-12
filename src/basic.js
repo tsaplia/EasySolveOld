@@ -66,7 +66,10 @@ function simplifyFrac(coef){
     coef = coef.map(x=>x/g);
     if(exp && decimalCount(coef[0]/coef[1])<=3){
         coef[0]/=coef[1];
-        coef[1]=1;
+        coef[1]/=coef[1];
+    }else if(exp && decimalCount(coef[1]/coef[0])<=3){
+        coef[1]/=Math.abs(coef[0]);
+        coef[0]/=Math.abs(coef[0]);
     }
     return coef;
 }

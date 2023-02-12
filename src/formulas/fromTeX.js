@@ -86,8 +86,6 @@ function formulaFromTeX(str) {
  * @return {MathStructure}
  */
 function multiplierFromTex(itStr) {
-    if (itStr.cur == " ") itStr.add();
-
     let newStruct;
     if (itStr.startsWith("\\frac")) {
         newStruct = fracFromTeX(itStr);
@@ -114,6 +112,7 @@ function multiplierFromTex(itStr) {
     if (itStr.startsWith("^")) {
         return powerFromTeX(itStr, newStruct);
     }
+    if (!itStr.finished() && itStr.cur == " ") itStr.add();
     return newStruct;
 }
 

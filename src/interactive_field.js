@@ -37,7 +37,7 @@ let newPartModes = {
     replace: 2,
 };
 /** @type {number} */
-let newPartMode = newPartModes.addToEnd;
+let newPartMode = newPartModes.newLine;
 
 /**
  * @callback EventHandlerFunc
