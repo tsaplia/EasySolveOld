@@ -201,4 +201,19 @@ let formulaActions = [
             deleteActiveAll();
         },
     },
+    {
+        buttonId: "to-dec-btn",
+        check() {
+            return selected.formulas.length == 1 && selected.formulas[0].main instanceof Term && 
+                !selected.formulas[0].main._getComparativeProto().allMultipliers.length;
+        },
+        caller() {
+            let coef = selected.formulas[0].main.getRatio();
+            let newPart = Block.wrap(new Num(Math.round(coef[0]/coef[1]*100)/100));
+            let focused = (focusFormulaConfig &&
+                selected.formulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
+           _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused),
+               selected.formulas[0].HTML, focused);
+        },
+    },
 ];

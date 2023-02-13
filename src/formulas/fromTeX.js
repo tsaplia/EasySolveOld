@@ -86,6 +86,7 @@ function formulaFromTeX(str) {
  * @return {MathStructure}
  */
 function multiplierFromTex(itStr) {
+    if (!itStr.finished() && itStr.cur == " ") itStr.add();
     let newStruct;
     if (itStr.startsWith("\\frac")) {
         newStruct = fracFromTeX(itStr);
@@ -103,6 +104,7 @@ function multiplierFromTex(itStr) {
         newStruct = latinVariableFromTeX(itStr);
     } else error();
 
+    if (!itStr.finished() && itStr.cur == " ") itStr.add();
     if (itStr.startsWith("'")) {
         primeFromTeX(itStr, newStruct);
     }
