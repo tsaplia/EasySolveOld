@@ -36,13 +36,13 @@ let formulaActions = [
     {
         buttonId: "separate-btn",
         check() {
-            return selected.formulas.length == 1 && selected.formulas[0].formula.equalityParts.length >= 2 &&
-                (_getActiveType(selected.formulas[0]) == _activeTypes.term ||
-                _getActiveType(selected.formulas[0]) == _activeTypes.mult);
+            return selected.formulas[0].formula.equalityParts.length >= 2 &&
+                ((_getActiveType(selected.formulas[0]) == _activeTypes.mult && selected.formulas.length == 1) ||
+                (selected.formulas.every(obj =>_getActiveType(obj) == _activeTypes.term)));
         },
         caller() {
             if (_getActiveType(selected.formulas[0]) == _activeTypes.term) {
-                insertFormula( selected.formulas[0].formula.separateTerm(selected.formulas[0].main));
+                insertFormula( selected.formulas[0].formula.separateTerms(...selected.formulas.map(obj=>obj.main)));
             } else {
                 insertFormula(selected.formulas[0].formula.separateMultiplier(selected.formulas[0].main,
                     selected.formulas[0].term));
@@ -205,7 +205,7 @@ let formulaActions = [
         buttonId: "to-dec-btn",
         check() {
             return selected.formulas.length == 1 && selected.formulas[0].main instanceof Term && 
-                !selected.formulas[0].main._getComparativeProto().allMultipliers.length;
+                !selected.formulas[0].main._getComparativeProto().allMultipliers().length;
         },
         caller() {
             let coef = selected.formulas[0].main.getRatio();

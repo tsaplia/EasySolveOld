@@ -123,7 +123,7 @@ class Block extends MathStructure {
     add(...items) {
         for (let item of items) {
             if (item instanceof Term) {
-                this.content.push(item);
+                this.content.push(item.copy());
             } else if (item instanceof Block) {
                 this.content.push(...item.content);
             } else {

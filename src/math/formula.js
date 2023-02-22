@@ -133,33 +133,25 @@ class Formula extends MathStructure {
     }
 
     /**
-     * @param {Term} term
+     * @param {...Term} terms
      * @return {Formula}
      */
-    separateTerm(term) {
-        let activePart = this._getActivePart(term);
-        let passivePart = this._getPassivePart(term);
+    separateTerms(...terms) {
+        let left = new Block([]);
+        let right = new Block([]);
+        left.add(...this._getActivePart(terms[0]).content.filter(val=>terms.includes(val)));
+        left.subtract(...this._getPassivePart(terms[0]).content.filter(val=>terms.includes(val)));
+        right.add(...this._getPassivePart(terms[0]).content.filter(val=>!terms.includes(val)));
+        right.subtract(...this._getActivePart(terms[0]).content.filter(val=>!terms.includes(val)));
 
-        let leftPart = Block.wrap(term.copy());
-        let rightPart = passivePart.copy();
-
-        for (let item of activePart.content) {
-            if (item == term) {
-                continue;
-            }
-
-            let newItem = item.copy();
-            newItem.changeSign();
-            rightPart.add(newItem);
+        if (terms[0].sign == "-" ) {
+            left.changeSignes();
+            right.changeSignes();
         }
+        left.simplify();
+        right.simplify();
 
-        if (term.sign == "-") {
-            leftPart.changeSignes();
-            rightPart.changeSignes();
-        }
-        rightPart.simplify();
-
-        return new Formula([leftPart, rightPart]);
+        return new Formula([left, right]);
     }
 
     /**
@@ -170,7 +162,7 @@ class Formula extends MathStructure {
     separateMultiplier(mult, term) {
         let leftPart;
         let rightPart;
-        [leftPart, rightPart] = this.separateTerm(term).equalityParts;
+        [leftPart, rightPart] = this.separateTerms(term).equalityParts;
 
         if (rightPart.content.length > 1) {
             rightPart = Block.wrap(rightPart);

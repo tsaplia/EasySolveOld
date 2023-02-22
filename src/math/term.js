@@ -129,7 +129,8 @@ class Term {
             [currrentBase, currentPow] = Power.getPower(this.content[i]);
             [nextBase, nextPow] = Power.getPower(this.content[i + 1]);
 
-            if (!currrentBase.isEqual(nextBase) || currrentBase instanceof Num) continue;
+            if ((this.content[i] instanceof Num && this.content[i + 1] instanceof Num) || 
+                !currrentBase.isEqual(nextBase) ) continue;
 
             let sumPow = currentPow.copy();
             sumPow.add(nextPow);
