@@ -8,7 +8,7 @@ let currentInput = null;
 const mqConfig = {
     supSubsRequireOperand: true,
     maxDepth: 4,
-    autoOperatorNames: availibleMathFunc.join(" "),
+    autoOperatorNames: Object.keys(availibleMathFunc).join(" "),
 };
 
 const formulaInputField = MQ.MathField(document.querySelector("#mq-math-field"), mqConfig);

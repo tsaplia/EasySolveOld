@@ -315,7 +315,7 @@ function specialNameFromTeX(itStr) {
         itStr.add(name.length);
         return new Variable(`\\${name} `);
     }
-    for (let name of availibleMathFunc) {
+    for (let name of Object.keys(availibleMathFunc)) {
         if (!itStr.startsWith(name)) continue;
         itStr.add(name.length);
         return new Func(name, blockFromTeX(itStr, true));

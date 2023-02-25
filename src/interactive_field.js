@@ -50,6 +50,26 @@ let focusFormulaConfig = null;
  */
 let contentTeX = [];
 
+/**
+ * IF variables with defined value
+ * @type {Object.<string, Block>}
+ */
+let IFVariables = {}
+
+ /**
+  * tries to add IF-variable
+  * @param {Formula} formula 
+  */
+function addToVariables(formula){
+    if(formula.equalityParts[0].content[0].content[0] instanceof Variable){
+        try {
+            calculate(formula.rightPart());
+            let variable = formula.equalityParts[0].content[0].content[0].toTex();
+            IFVariables[variable] = formula.rightPart();
+        } catch (error) {}
+    }
+}
+
 
 /**
  * @param {string} TeX
@@ -78,6 +98,7 @@ function deleteContent(elem) {
 
 /** delete all elements from IF */
 function clearContent() {
+    variables = {};
     for (let child of interactiveField.children) {
         deleteContent(child);
     }
@@ -96,6 +117,7 @@ function insertFormula(formula, before) {
     MathJax.typeset([elem]);
     insertContent(`$$${formula.toTex()}$$`, elem, before);
     prepareHTML(elem, formula.copy());
+    addToVariables(formula);
 }
 
 /**

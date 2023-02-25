@@ -45,7 +45,7 @@ function _getInnerText(elem) {
 function _groupFunctionParts(root) {
     let selected = root.querySelectorAll("mjx-mi");
     for (let elem of selected) {
-        if (!availibleMathFunc.includes(_getInnerText(elem))) continue;
+        if (!Object.keys(availibleMathFunc).includes(_getInnerText(elem))) continue;
 
         let group = _wrap(elem, classNames.function);
         if (!_getInnerText(group.nextElementSibling)) {

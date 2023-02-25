@@ -10,7 +10,7 @@ function _wrapPart(newPart, active, focused=false) {
         newPart = active.formula.substituteMultiplier(active.mult, active.term, new Formula([newPart]));
         return _wrapPart(newPart, active);
     }
-    if (newPartMode==newPartModes.addToEnd) {
+    if (newPartMode == newPartModes.addToEnd) {
         active.formula.equalityParts.push(newPart);
         return active.formula.copy();
     }
@@ -204,16 +204,32 @@ let formulaActions = [
     {
         buttonId: "to-dec-btn",
         check() {
-            return selected.formulas.length == 1 && selected.formulas[0].main instanceof Term && 
-                !selected.formulas[0].main._getComparativeProto().allMultipliers().length;
+            return selected.formulas.length == 1 && selected.formulas[0].main instanceof Formula;
         },
         caller() {
-            let coef = selected.formulas[0].main.getRatio();
-            let newPart = Block.wrap(new Num(Math.round(coef[0]/coef[1]*100)/100));
-            let focused = (focusFormulaConfig &&
-                selected.formulas[0].formula.equalityParts[0]==focusFormulaConfig.path.mult);
-           _addFormula(_wrapPart(newPart, focused?focusFormulaConfig.path: selected.formulas[0], focused),
-               selected.formulas[0].HTML, focused);
+            try {
+                selected.formulas[0].term = selected.formulas[0].formula.rightPart().content[0];
+                let newPart = formulaFromTeX(calculate(selected.formulas[0].formula.rightPart())).leftPart();
+                _addFormula(_wrapPart(newPart, selected.formulas[0]), selected.formulas[0].HTML);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    },
+    {
+        buttonId: "subs-all-btn",
+        check() {
+            return selected.formulas.length == 1 && selected.formulas[0].main instanceof Formula;
+        },
+        caller() {
+            try {
+                selected.formulas[0].term = selected.formulas[0].formula.rightPart().content[0];
+                let newPart = subsBlock(selected.formulas[0].formula.rightPart());
+                _addFormula(_wrapPart(newPart, selected.formulas[0]), selected.formulas[0].HTML);
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 ];
+

@@ -4,10 +4,15 @@ const availibleLetters = [
     "chi", "lambda", "Lambda", "psi", "Psi", "mu", "omega", "Omega",
 ];
 
-const availibleMathFunc = [
-    "sin", "cos", "tan", "cot",
-    "arcsin", "arccos", "arctan",
-];
+const availibleMathFunc = {
+    "sin": Math.sin, 
+    "cos":Math.cos, 
+    "tan": Math.tan, 
+    "cot": (num)=>1/Math.tan(num),
+    "arcsin": Math.asin, 
+    "arccos":Math.acos, 
+    "arctan":Math.atan
+}
 
 /**
  * @param {number} a
