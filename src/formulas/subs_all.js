@@ -3,7 +3,7 @@ function subsBlock(block){
 }
 
 function subsTerm(term){
-    return new Term(term.content.map(mult=>subsMult(mult)));
+    return new Term(term.content.map(mult=>subsMult(mult)),term.sign);
 }
 
 function subsMult(mult){

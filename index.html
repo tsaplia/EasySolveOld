@@ -196,8 +196,10 @@
         
         menuArea.addEventListener( "contextmenu", event => {
             event.preventDefault();
-            menu.style.top = `${event.clientY}px`;
-            menu.style.left = `${event.clientX}px`;
+            let minTop = document.documentElement.clientHeight - menu.clientHeight;
+            let minLeft = document.documentElement.clientWidth - menu.clientWidth;
+            menu.style.top = `${Math.min(event.clientY, minTop)}px`;
+            menu.style.left = `${Math.min(event.clientX, minLeft)}px`;
             menu.classList.add("active-cm");
         }, false);
 
