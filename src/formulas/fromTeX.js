@@ -100,7 +100,7 @@ function multiplierFromTex(itStr) {
         newStruct = specialNameFromTeX(itStr);
     } else if (!isNaN(itStr.cur)) {
         newStruct = numFromTeX(itStr);
-    } else if (itStr.cur.match(/[A-Za-z]/i)) {
+    } else if (itStr.cur.match(/[A-Za-z\wа-яА-Я]/i)) {
         newStruct = latinVariableFromTeX(itStr);
     } else error();
 

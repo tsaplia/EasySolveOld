@@ -52,55 +52,57 @@
 </head>
 <body>
     <div class="container-xl pt-2" style="position:relative;">
-        <div class="toolbar">
-            <div class="btn-group mt-2" role="group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Файл
-                </button>
-                <ul class="dropdown-menu insert-dm">
-                    <li class="dropdown-item" id="open-file">
-                        <label for="file-input">Відкрити</label>
-                        <input type="file" name="file-input" id="file-input" accept=".tex">
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li class="dropdown-item" id="save-image">Зберегти як зображення</li>
-                    <li class="dropdown-item" id="save-latex">Зберегти як LaTeX</li>
-                </ul>
-            </div>
-            <div class="btn-group tool-bow mt-2" role="group" >
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary dropdown-toggle insert-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        Вставлення
+        <div class="navbar justify-content-between">
+            <div>
+                <div class="btn-group mt-2" role="group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Файл
                     </button>
                     <ul class="dropdown-menu insert-dm">
-                        <li class="dropdown-item insert-formula-btn">Формула</li>
-                        <li class="dropdown-item insert-text-btn">Текст</li>
+                        <li class="dropdown-item" id="open-file">
+                            <label for="file-input">Відкрити</label>
+                            <input type="file" name="file-input" id="file-input" accept=".tex">
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-item" id="save-image">Зберегти як зображення</li>
+                        <li class="dropdown-item" id="save-latex">Зберегти як LaTeX</li>
                     </ul>
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary dropdown-toggle formulas-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        Дії з формулами
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item" id="separate-btn">Виразити</li>
-                        <li class="dropdown-item" id="substitute-btn">Підставити</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="common-denominator-btn">Звести до спільного знаменника</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="open-bracket-btn">Розкрити дужки</li>
-                        <li class="dropdown-item" id="out-bracket-btn">Винести множник за дужки</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="multiply-btn">Помножити рівняння на</li>
-                        <li class="dropdown-item" id="add-btn">Додати рівняння</li>
-                        <li class="dropdown-item" id="substract-btn">Відняти рівняння</li>
-                        <li class="dropdown-item" id="devide-btn">Ділити рівняння</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="subs-all-btn">Підставити всі змінні</li>
-                        <li class="dropdown-item" id="to-dec-btn">Розрахувати</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" id="focus-btn">Сфокусувати</li>
-                        
-                    </ul>
+                <div class="btn-group tool-bow mt-2" role="group" >
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle insert-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            Вставлення
+                        </button>
+                        <ul class="dropdown-menu insert-dm">
+                            <li class="dropdown-item insert-formula-btn">Формула</li>
+                            <li class="dropdown-item insert-text-btn">Текст</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle formulas-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            Дії з формулами
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="separate-btn">Виразити</li>
+                            <li class="dropdown-item" id="substitute-btn">Підставити</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="common-denominator-btn">Звести до спільного знаменника</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="open-bracket-btn">Розкрити дужки</li>
+                            <li class="dropdown-item" id="out-bracket-btn">Винести множник за дужки</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="multiply-btn">Помножити рівняння</li>
+                            <li class="dropdown-item" id="add-btn">Додати рівняння</li>
+                            <li class="dropdown-item" id="substract-btn">Відняти рівняння</li>
+                            <li class="dropdown-item" id="devide-btn">Ділити рівняння</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="subs-all-btn">Підставити всі змінні</li>
+                            <li class="dropdown-item" id="to-dec-btn">Розрахувати</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="focus-btn">Сфокусувати</li>
+                            
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="btn-group mt-2" role="group" >
